@@ -158,6 +158,8 @@ if (file_exists($env_config)) {
 
 Config::apply();
 
+define('FS_METHOD', 'direct');
+
 /**
  * Bootstrap WordPress
  */

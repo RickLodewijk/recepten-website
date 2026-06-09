@@ -7,9 +7,10 @@ services:
     env_file:
       - .env
     volumes:
-      - .\web\app:/var/www/html/web/app
-      - .\config:/var/www/html/config
-      - .\.env:/var/www/html/.env
+      - ./web/app:/var/www/html/web/app
+      - ./config:/var/www/html/config
+      - ./.env:/var/www/html/.env
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini  # <- Hier hoort hij thuis!
     depends_on:
       - db
 
