@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aanwezigheidsrooster</title>
+    <style>
+        /* Algemene styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        /* Week selector styling */
+        .selector-container {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        select {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            background-color: #fff;
+            color: #1e293b;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: #3b82f6;
+        }
+
+        /* Tabel styling */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Naam kolom specifieke styling */
+        .naam-kolom {
+            font-weight: 600;
+            color: #1e293b;
+            background-color: #fff;
+            border-right: 2px solid #e2e8f0;
+            font-size: 15px;
+        }
+
+        /* Tijd badge styling */
+        .tijd-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            background-color: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            white-space: nowrap;
+        }
+
+        /* Styling voor als iemand afwezig is */
+        .afwezig {
+            color: #94a3b8;
+            font-size: 14px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Aanwezigheidsrooster</h1>
+
+    <!-- Week Selector -->
+    <div class="selector-container">
+        <label for="week-select">Selecteer week:</label>
+        <select id="week-select" onchange="wisselWeek()">
+            <option value="0">Deze week</option>
+            <option value="1">Volgende week</option>
+            <option value="2">Over 2 weken</option>
+            <option value="3">Over 3 weken</option>
+        </select>
+    </div>
+
+    <!-- Rooster Tabel met Namen en Tijden -->
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Maandag</th>
+                    <th>Dinsdag</th>
+                    <th>Woensdag</th>
+                    <th>Donderdag</th>
+                    <th>Vrijdag</th>
+                    <th>Zaterdag</th>
+                    <th>Zondag</th>
+                </tr>
+            </thead>
+            <tbody id="rooster-body">
+                <tr>
+                    <td class="naam-kolom">Jan Jansen</td>
+                    <td><span class="tijd-badge">09:00 - 17:00</span></td>
+                    <td><span class="tijd-badge">09:00 - 17:00</span></td>
+                    <td><span class="tijd-badge">09:00 - 12:30</span></td>
+                    <td><span class="tijd-badge">09:00 - 17:00</span></td>
+                    <td class="afwezig">Afwezig</td>
+                    <td class="afwezig">Afwezig</td>
+                    <td class="afwezig">Afwezig</td>
+                </tr>
+                <tr>
+                    <td class="naam-kolom">An de Vries</td>
+                    <td class="afwezig">Afwezig</td>
+                    <td><span class="tijd-badge">08:30 - 16:30</span></td>
+                    <td><span class="tijd-badge">08:30 - 16:30</span></td>
+                    <td class="afwezig">Afwezig</td>
+                    <td><span class="tijd-badge">08:30 - 16:00</span></td>
+                    <td><span class="tijd-badge">10:00 - 14:00</span></td>
+                    <td class="afwezig">Afwezig</td>
+                </tr>
+                <tr>
+                    <td class="naam-kolom">Peter Bakker</td>
+                    <td><span class="tijd-badge">13:00 - 21:00</span></td>
+                    <td class="afwezig">Afwezig</td>
+                    <td><span class="tijd-badge">13:00 - 21:00</span></td>
+                    <td><span class="tijd-badge">13:00 - 21:00</span></td>
+                    <td><span class="tijd-badge">13:00 - 21:00</span></td>
+                    <td class="afwezig">Afwezig</td>
+                    <td class="afwezig">Afwezig</td>
+                </tr>
+                <tr>
+                    <td class="naam-kolom">Lisa de Jong</td>
+                    <td><span class="tijd-badge">09:00 - 17:00</span></td>
+                    <td><span class="tijd-badge">09:00 - 17:00</span></td>
+                    <td class="afwezig">Afwezig</td>
+                    <td><span class="tijd-badge">09:00 - 17:00</span></td>
+                    <td><span class="tijd-badge">09:00 - 17:00</span></td>
+                    <td class="afwezig">Afwezig</td>
+                    <td><span class="tijd-badge">12:00 - 16:00</span></td>
+                </tr>
+                <tr>
+                    <td>Totaal</td>
+                    <td><span class="totaal">4 mensen</span></td>
+                    <td><span class="totaal">4 mensen</span></td>
+                    <td><span class="totaal">4 mensen</span></td>
+                    <td><span class="totaal">4 mensen</span></td>
+                    <td><span class="totaal">4 mensen</span></td>
+                    <td><span class="totaal">4 mensen</span></td>
+                    <td><span class="totaal">4 mensen</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Placeholder voor interactiviteit bij het wisselen van de week
+    function wisselWeek() {
+        const selector = document.getElementById('week-select');
+        const gekozenWeek = selector.options[selector.selectedIndex].text;
+        console.log("Gegevens laden voor: " + gekozenWeek);
+        // Hier kun je later JavaScript toevoegen om de tijden in de tabel aan te passen op basis van de gekozen week
+    }
+</script>
+
+</body>
+</html>
