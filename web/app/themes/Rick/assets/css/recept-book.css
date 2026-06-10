@@ -1,0 +1,101 @@
+@page {
+    size: 216mm 303mm;
+    margin: 0;
+}
+
+@media print {
+    html,
+    body {
+        width: 216mm;
+        height: 303mm;
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .recipe-print-actions {
+        display: none !important;
+    }
+
+    .recipe-container {
+        width: 216mm;
+        min-height: 303mm;
+        margin: 0;
+        padding: 16mm 14mm;
+        border-radius: 0;
+        box-shadow: none;
+        page-break-after: always;
+        overflow: hidden;
+    }
+
+    .recipe-container:last-child {
+        page-break-after: auto;
+    }
+
+    .header,
+    .intro,
+    .tip-box,
+    .ingredients-table,
+    .steps,
+    h2 {
+        break-inside: avoid;
+    }
+
+    .header.has-image .image-wrapper .image {
+        max-height: 95mm;
+        object-fit: cover;
+    }
+
+    .recipe-container {
+        font-size: 11pt;
+        line-height: 1.45;
+    }
+
+    h1 {
+        font-size: 22pt;
+    }
+
+    h2 {
+        font-size: 13pt;
+        margin-top: 10mm;
+    }
+
+    .ingredients-table th,
+    .ingredients-table td {
+        padding: 3.5mm 3mm;
+    }
+
+    .tip-box {
+        margin-top: 8mm;
+    }
+}
+
+@media screen {
+    .recipe-print-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+    }
+
+    .recipe-print-actions__button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        padding: 12px 18px;
+        background: var(--primary-color);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .recipe-print-actions__button:hover {
+        filter: brightness(0.96);
+    }
+}

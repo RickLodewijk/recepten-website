@@ -1,4 +1,6 @@
 <?php
+require_once get_theme_file_path('inc/recepten/helpers.php');
+
 get_header();
 
 if ( have_posts() ) :
@@ -10,8 +12,13 @@ if ( have_posts() ) :
         $ingredienten = rick_get_recept_field('ingredienten');
         $bereidingswijze = rick_get_recept_field('bereidingswijze');
         $bakker_tip = rick_get_recept_field('bakker_tip');
+        $recipe_color = rick_get_recept_primary_category_color( get_the_ID() );
         ?>
-        <div class="recipe-container">
+        <div class="recipe-container" style="--primary-color: <?php echo esc_attr( $recipe_color ); ?>;">
+            <div class="recipe-print-actions">
+                <button class="recipe-print-actions__button" type="button" onclick="window.print()">Print als fotoboek</button>
+            </div>
+
             <div class="header<?php echo $recept_afbeelding ? ' has-image' : ''; ?>">
                 <div class="content">
                     <?php if ( $meta_info ) : ?>

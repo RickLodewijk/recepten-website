@@ -36,6 +36,7 @@ function rick_register_recepten_cpt() {
         'menu_position'      => 20,
         'menu_icon'          => 'dashicons-carrot',
         'supports'           => array('title'),
+        'taxonomies'         => array('recept_categorie'),
         'rewrite'            => array('slug' => 'recepten', 'with_front' => false),
         'show_in_menu'       => true,
         'publicly_queryable' => true,

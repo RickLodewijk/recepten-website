@@ -1,5 +1,6 @@
 <?php
 require_once get_theme_file_path('inc/post-types/recepten.php');
+require_once get_theme_file_path('inc/taxonomies/recept-categorie.php');
 require_once get_theme_file_path('inc/admin/recepten-meta-boxes.php');
 require_once get_theme_file_path('inc/recepten/helpers.php');
 
@@ -36,6 +37,16 @@ function rick_enqueue_assets() {
             get_theme_file_uri($single_css_rel),
             array('rick-style'),
             file_exists($single_css_abs) ? filemtime($single_css_abs) : $theme_version
+        );
+
+        $book_css_rel = 'assets/css/recept-book.css';
+        $book_css_abs = get_theme_file_path($book_css_rel);
+
+        wp_enqueue_style(
+            'rick-recept-book',
+            get_theme_file_uri($book_css_rel),
+            array('rick-style', 'rick-single-recept'),
+            file_exists($book_css_abs) ? filemtime($book_css_abs) : $theme_version
         );
     }
 }
