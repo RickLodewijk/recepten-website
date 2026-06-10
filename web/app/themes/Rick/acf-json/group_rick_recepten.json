@@ -1,0 +1,175 @@
+{
+    "key": "group_rick_recepten",
+    "title": "Recept velden",
+    "fields": [
+        {
+            "key": "field_rick_meta_info",
+            "label": "Ondertitel",
+            "name": "meta_info",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Bijv: \"Recept voor Zelfgemaakte\"",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_rick_recept_afbeelding",
+            "label": "Afbeelding",
+            "name": "recept_afbeelding",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Return value: Image URL",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "url",
+            "preview_size": "medium",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_rick_bereidingstijd",
+            "label": "Bereidingstijd",
+            "name": "bereidingstijd",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Bijv: \"2 uur\"",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_rick_intro_tekst",
+            "label": "Introductie",
+            "name": "intro_tekst",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "Je introductiepraatje",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "tabs": "visual",
+            "toolbar": "full",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_rick_ingredienten",
+            "label": "Ingrediënten",
+            "name": "ingredienten",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Elke regel: Ingrediënt|Hoeveelheid",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": 6,
+            "placeholder": "",
+            "new_lines": "br"
+        },
+        {
+            "key": "field_rick_bereidingswijze",
+            "label": "Bereidingswijze",
+            "name": "bereidingswijze",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "Elke stap op een nieuwe regel. Koppen met ##",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "tabs": "visual",
+            "toolbar": "full",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_rick_bakker_tip",
+            "label": "Bakker Tip",
+            "name": "bakker_tip",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "De tip onderaan de pagina",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": 4,
+            "placeholder": "",
+            "new_lines": "br"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "recept"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1781087532
+}

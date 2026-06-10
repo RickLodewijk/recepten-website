@@ -1,0 +1,168 @@
+
+:root {
+    --primary-color: #d97706; /* Warme brood/oranje kleur passend bij Argeta */
+    --text-color: #374151;
+    --bg-color: #f9fafb;
+    --card-bg: #ffffff;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+.recipe-container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.header {
+    text-align: center;
+    border-bottom: 2px solid #f3f4f6;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+.has-image {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Zorgt dat tekst en beeld verticaal perfect in het midden uitlijnen */
+    justify-content: space-between;
+    gap: 20px; /* Geeft wat ademruimte tussen de tekst en de afbeelding */
+    width: 100%;
+
+    .content {
+        flex: 1; /* Zorgt ervoor dat de tekst de resterende ruimte netjes opvult */
+        max-width: 45%; /* Voorkomt dat de tekst te dicht tegen de afbeelding aanloopt */
+    }
+
+    .image-wrapper {
+        flex: 1;
+        max-width: 50%;
+        display: flex;
+        justify-content: flex-end; /* Zorgt dat de afbeelding netjes rechts uitlijnt */
+
+        .image {
+            width: 100%;
+            max-width: 100%; /* Voorkomt dat de afbeelding groter wordt dan zijn container */
+            height: auto;
+            border-radius: 8px;
+            display: block; /* Verwijdert eventuele ongewenste witruimte onder de afbeelding */
+        }
+    }
+}
+
+h1 {
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.meta-info {
+    font-style: italic;
+    color: #6b7280;
+    margin-bottom: 15px;
+}
+
+.badge {
+    display: inline-block;
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.intro {
+    background-color: #fffbeb;
+    border-left: 4px solid var(--primary-color);
+    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 0 8px 8px 0;
+}
+
+h2 {
+    color: #1f2937;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
+    margin-top: 30px;
+}
+
+/* Ingredienten Tabel Styling */
+.ingredients-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.ingredients-table th, .ingredients-table td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.ingredients-table th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+}
+
+.ingredients-table tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Bereidingswijze Stappen */
+.steps {
+    list-style-type: none;
+    padding: 0;
+}
+
+.steps h3 {
+    color: var(--primary-color);
+    margin-top: 25px;
+    font-size: 1.2rem;
+}
+
+.steps li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 12px;
+}
+
+.steps li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Tip Box */
+.tip-box {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+.tip-title {
+    color: #166534;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+.tip-content {
+    margin: 0; 
+    color: #1e293b;
+}
