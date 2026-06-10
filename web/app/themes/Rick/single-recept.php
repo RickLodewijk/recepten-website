@@ -11,89 +11,81 @@ if ( have_posts() ) :
         $bereidingswijze = rick_get_recept_field('bereidingswijze');
         $bakker_tip = rick_get_recept_field('bakker_tip');
         ?>
-        <main class="recipe-single">
-            <article class="recipe-single__card">
-                <header class="recipe-single__header<?php echo $recept_afbeelding ? ' recipe-single__header--with-image' : ''; ?>">
-                    <div class="recipe-single__header-content">
-                        <?php if ( $meta_info ) : ?>
-                            <p class="recipe-single__meta"><?php echo esc_html( $meta_info ); ?></p>
-                        <?php endif; ?>
-
-                        <h1 class="recipe-single__title"><?php the_title(); ?></h1>
-
-                        <?php if ( $bereidingstijd ) : ?>
-                            <span class="recipe-single__badge">Totale bereidingstijd: <?php echo esc_html( $bereidingstijd ); ?></span>
-                        <?php endif; ?>
-                    </div>
-
-                    <?php if ( $recept_afbeelding ) : ?>
-                        <div class="recipe-single__image-wrap">
-                            <img class="recipe-single__image" src="<?php echo esc_url( $recept_afbeelding ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>">
-                        </div>
+        <div class="recipe-container">
+            <div class="header<?php echo $recept_afbeelding ? ' has-image' : ''; ?>">
+                <div class="content">
+                    <?php if ( $meta_info ) : ?>
+                        <p class="meta-info"><?php echo esc_html( $meta_info ); ?></p>
                     <?php endif; ?>
-                </header>
 
-                <?php if ( $intro_tekst ) : ?>
-                    <section class="recipe-single__section recipe-single__intro">
-                        <?=$intro_tekst ?>
-                    </section>
+                    <h1><?php the_title(); ?></h1>
+
+                    <?php if ( $bereidingstijd ) : ?>
+                        <span class="badge">Totale bereidingstijd: <?php echo esc_html( $bereidingstijd ); ?></span>
+                    <?php endif; ?>
+                </div>
+
+                <?php if ( $recept_afbeelding ) : ?>
+                    <div class="image-wrapper">
+                        <img class="image" src="<?php echo esc_url( $recept_afbeelding ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>">
+                    </div>
                 <?php endif; ?>
+            </div>
 
-                <?php if ( $ingredienten ) : ?>
-                    <section class="recipe-single__section">
-                        <h2>Ingrediënten</h2>
-                        <div class="recipe-single__ingredients">
-                            <table class="recipe-single__ingredients-table">
-                                <thead>
-                                    <tr>
-                                        <th>Ingrediënt</th>
-                                        <th>Hoeveelheid</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $ingredient_lines = preg_split('/\r\n|\r|\n/', trim( $ingredienten ) );
+            <?php if ( $intro_tekst ) : ?>
+                <div class="intro">
+                    <p><?php echo wp_kses_post( wpautop( $intro_tekst ) ); ?></p>
+                </div>
+            <?php endif; ?>
 
-                                    foreach ( $ingredient_lines as $ingredient_line ) {
-                                        $ingredient_line = wp_strip_all_tags( trim( $ingredient_line ) );
+            <?php if ( $ingredienten ) : ?>
+                <h2>Ingrediënten</h2>
+                <table class="ingredients-table">
+                    <thead>
+                        <tr>
+                            <th>Ingrediënt</th>
+                            <th>Hoeveelheid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $ingredient_lines = preg_split('/\r\n|\r|\n/', trim( $ingredienten ) );
 
-                                        if ( $ingredient_line === '' ) {
-                                            continue;
-                                        }
+                        foreach ( $ingredient_lines as $ingredient_line ) {
+                            $ingredient_line = wp_strip_all_tags( trim( $ingredient_line ) );
 
-                                        $parts = array_map('trim', explode('|', $ingredient_line, 2));
-                                        $ingredient_name = wp_strip_all_tags( $parts[0] );
-                                        $ingredient_amount = wp_strip_all_tags( $parts[1] ?? '' );
+                            if ( $ingredient_line === '' ) {
+                                continue;
+                            }
 
-                                        echo '<tr>';
-                                        echo '<td>' . esc_html( $ingredient_name ) . '</td>';
-                                        echo '<td>' . esc_html( $ingredient_amount ) . '</td>';
-                                        echo '</tr>';
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                <?php endif; ?>
+                            $parts = array_map('trim', explode('|', $ingredient_line, 2));
+                            $ingredient_name = wp_strip_all_tags( $parts[0] );
+                            $ingredient_amount = wp_strip_all_tags( $parts[1] ?? '' );
 
-                <?php if ( $bereidingswijze ) : ?>
-                    <section class="recipe-single__section">
-                        <h2>Bereidingswijze</h2>
-                        <div class="recipe-single__steps">
-                            <?=$bereidingswijze?>
-                        </div>
-                    </section>
-                <?php endif; ?>
+                            echo '<tr>';
+                            echo '<td>' . esc_html( $ingredient_name ) . '</td>';
+                            echo '<td>' . esc_html( $ingredient_amount ) . '</td>';
+                            echo '</tr>';
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
 
-                <?php if ( $bakker_tip ) : ?>
-                    <aside class="recipe-single__tip">
-                        <div class="recipe-single__tip-title">Bakker Tip</div>
-                        <div class="recipe-single__tip-content"><?php echo wp_kses_post( wpautop( $bakker_tip ) ); ?></div>
-                    </aside>
-                <?php endif; ?>
-            </article>
-        </main>
+            <?php if ( $bereidingswijze ) : ?>
+                <h2>Bereidingswijze</h2>
+                <div class="steps">
+                    <?=$bereidingswijze?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ( $bakker_tip ) : ?>
+                <div class="tip-box">
+                    <div class="tip-title">💡 Tip van de bakker:</div>
+                    <p class="tip-content"><?php echo wp_kses_post( wpautop( $bakker_tip ) ); ?></p>
+                </div>
+            <?php endif; ?>
+        </div>
         <?php
     endwhile;
 endif;

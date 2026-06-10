@@ -40,3 +40,6 @@ function rick_enqueue_assets() {
     }
 }
 add_action('wp_enqueue_scripts','rick_enqueue_assets');
+
+// Sta applicatiewachtwoorden toe op een lokale niet-HTTPS (HTTP) site
+add_filter('wp_is_application_passwords_supported', '__return_true');
