@@ -21,6 +21,36 @@ body {
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+}
+
+.recipe-print-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.recipe-print-actions__button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.recipe-print-actions__button::before {
+    content: '🖨️';
+}
+
+.recipe-print-actions__button:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 80%, black);
 }
 
 .header {
@@ -184,5 +214,139 @@ h2 {
     .header.has-image .content,
     .header.has-image .image-wrapper {
         max-width: 100%;
+    }
+}
+
+/* Print styles for the "Photo Book" experience */
+@media print {
+    @page {
+        size: A4;
+        margin: 1.5cm;
+    }
+
+    /* Hide non-recipe elements specifically */
+    header, 
+    footer, 
+    nav, 
+    .recipe-print-actions, 
+    .admin-bar, 
+    #wpadminbar, 
+    aside, 
+    .sidebar,
+    .wp-block-buttons {
+        display: none !important;
+    }
+
+    /* Reset layout constraints for print */
+    html, body, main {
+        background: #fff !important;
+        color: #000 !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        overflow: visible !important;
+        float: none !important;
+    }
+
+    .recipe-container {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: transparent !important;
+        overflow: visible !important;
+    }
+
+    /* Force background colors */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Typography */
+    h1 {
+        color: var(--primary-color) !important;
+        font-size: 24pt !important;
+        margin: 0 0 15px 0 !important;
+        padding: 0 !important;
+    }
+
+    h2 {
+        border-bottom: 2px solid var(--primary-color) !important;
+        margin-top: 30px !important;
+        font-size: 16pt !important;
+        color: #000 !important;
+        padding-bottom: 5px !important;
+    }
+
+    .meta-info { 
+        color: #666 !important;
+        font-size: 11pt !important;
+        margin-bottom: 10px !important;
+    }
+
+    .badge { 
+        background-color: #fef3c7 !important; 
+        color: #92400e !important;
+        border: 1px solid #92400e !important;
+        padding: 4pt 8pt !important;
+        font-size: 10pt !important;
+    }
+    
+    .intro {
+        background-color: #fffbeb !important;
+        border-left: 5px solid var(--primary-color) !important;
+        padding: 12pt !important;
+        margin: 20pt 0 !important;
+    }
+
+    /* Table styling */
+    .ingredients-table {
+        display: table !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin-top: 15pt !important;
+    }
+
+    .ingredients-table th {
+        background-color: #f3f4f6 !important;
+        color: #000 !important;
+        font-weight: bold !important;
+        border-bottom: 1pt solid #ccc !important;
+    }
+
+    .ingredients-table td {
+        border-bottom: 1pt solid #eee !important;
+    }
+
+    /* Images */
+    .image-wrapper {
+        display: block !important;
+        float: none !important;
+        margin-bottom: 20pt !important;
+    }
+
+    .image-wrapper img {
+        max-width: 100% !important;
+        max-height: 8cm !important;
+        height: auto !important;
+        object-fit: contain !important;
+        border-radius: 4pt !important;
+    }
+
+    /* Steps */
+    .steps {
+        display: block !important;
+    }
+
+    /* Prevent breaking content */
+    .header, .intro, .ingredients-table, .tip-box, .steps p, .steps li {
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
 }

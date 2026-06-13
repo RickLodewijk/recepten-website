@@ -265,7 +265,7 @@ function rick_ppt_export_page() {
                     currY += introH + 0.3;
                 }
 
-                // -- INGREDIËNTEN (Auto-Paging Tabel) --
+                // -- INGREDIËNTEN (Volledige breedte) --
                 if (rec.ingredienten && rec.ingredienten.length > 0) {
                     slide.addText("Ingrediënten", {
                         x: marginX, y: currY, w: contentW, h: 0.4,
@@ -274,13 +274,6 @@ function rick_ppt_export_page() {
                     currY += 0.4;
 
                     var tableRows = [];
-                    // Table Header
-                    tableRows.push([
-                        { text: "Ingrediënt", options: { bold:true, fill:PRIMARY, color:'FFFFFF', fontSize:11, border:{pt:1,color:'FFFFFF'} } },
-                        { text: "Hoeveelheid", options: { bold:true, fill:PRIMARY, color:'FFFFFF', fontSize:11, border:{pt:1,color:'FFFFFF'} } }
-                    ]);
-
-                    // Table Data
                     rec.ingredienten.forEach(function(ing, i) {
                         var bgc = (i % 2 === 0) ? 'FFF7ED' : 'FFFDF8';
                         tableRows.push([
@@ -289,29 +282,38 @@ function rick_ppt_export_page() {
                         ]);
                     });
 
-                    var tblOpts = {
+                    // We schatten de hoogte van de tabel om currY bij te werken
+                    // 1 rij is ongeveer 0.25 inch
+                    var estimatedTableH = tableRows.length * 0.25;
+
+                    slide.addTable(tableRows, {
                         x: marginX,
                         y: currY,
                         w: contentW,
-                        colW: [contentW/2, contentW/2],
-                        autoPage: true,          // Magisch afbreken naar nieuwe slide!
-                        autoPageLineWeight: -0.5,
-                        margin: 0.05
-                    };
+                        colW: [contentW * 0.7, contentW * 0.3],
+                        margin: 0.05,
+                        autoPage: false // We laten de tabel niet auto-pagen om currY controle te houden
+                    });
 
-                    slide.addTable(tableRows, tblOpts);
+                    currY += estimatedTableH + 0.4;
                 }
 
-                // -- BEREIDINGSWIJZE (Altijd op nieuwe verse slide na ingrediënten om conflicten met PptxGenJS auto-paging te vermijden) --
+                // -- BEREIDINGSWIJZE (Onder de ingrediënten) --
                 if (rec.bereidingswijze && rec.bereidingswijze.length > 0) {
-                    var stappenSlide = pptx.addSlide({ masterName: masterName });
-                    var stepY = 0.8;
+                    // Als currY te laag is (bijv. onder 8 inch), verplaatsen we bereiding naar een nieuwe slide
+                    var targetSlide = slide;
+                    var targetY = currY;
 
-                    stappenSlide.addText("Bereidingswijze", {
-                        x: marginX, y: stepY, w: contentW, h: 0.4,
+                    if (targetY > 9) {
+                        targetSlide = pptx.addSlide({ masterName: masterName });
+                        targetY = 0.8;
+                    }
+
+                    targetSlide.addText("Bereidingswijze", {
+                        x: marginX, y: targetY, w: contentW, h: 0.4,
                         fontFace: 'Segoe UI', fontSize: 14, bold: true, color: '1F2937'
                     });
-                    stepY += 0.5;
+                    targetY += 0.4;
 
                     var textArr = [];
                     rec.bereidingswijze.forEach(function(stap) {
@@ -323,8 +325,8 @@ function rick_ppt_export_page() {
                         }
                     });
 
-                    stappenSlide.addText(textArr, {
-                        x: marginX, y: stepY, w: contentW, h: 8,
+                    targetSlide.addText(textArr, {
+                        x: marginX, y: targetY, w: contentW, h: 10.5 - targetY,
                         valign: "top",
                         autoPage: true // Paginering voor stappen!
                     });

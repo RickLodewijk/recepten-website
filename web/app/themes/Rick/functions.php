@@ -39,6 +39,7 @@ function rick_enqueue_assets() {
             file_exists($single_css_abs) ? filemtime($single_css_abs) : $theme_version
         );
 
+        /* Temporarily disabled to avoid conflicts
         $book_css_rel = 'assets/css/recept-book.css';
         $book_css_abs = get_theme_file_path($book_css_rel);
 
@@ -48,6 +49,7 @@ function rick_enqueue_assets() {
             array('rick-style', 'rick-single-recept'),
             file_exists($book_css_abs) ? filemtime($book_css_abs) : $theme_version
         );
+        */
     }
 }
 add_action('wp_enqueue_scripts','rick_enqueue_assets');
