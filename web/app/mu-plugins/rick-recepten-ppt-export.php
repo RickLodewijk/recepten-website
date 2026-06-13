@@ -149,7 +149,8 @@ function rick_ppt_export_page() {
             var pptx = new PptxGenJS();
             
             // A4 Formaat / Custom layout (216x303mm = ca 8.5 x 11.93 inches)
-            pptx.layout = { name: "A4Plus", width: 8.5, height: 11.93 };
+            pptx.defineLayout({ name: "A4Plus", width: 8.5, height: 11.93 });
+            pptx.layout = "A4Plus";
             
             // Recepten uitlezen
             var recepten = window.RickPptData.recepten;
