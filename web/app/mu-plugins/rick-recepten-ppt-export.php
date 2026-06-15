@@ -98,20 +98,43 @@ function rick_ppt_export_page() {
         ];
     }
 
+    // Haal baktips op
+    $baktips = get_posts([
+        'post_type'      => 'baktip',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ]);
+
+    $baktips_data = [];
+    foreach ($baktips as $tip) {
+        $acf_tekst = get_field('baktip_tekst', $tip->ID);
+        // Fallback naar the_content als acf leeg is (voor backwards compatibility)
+        $content_ruw = wp_strip_all_tags($acf_tekst ? $acf_tekst : $tip->post_content);
+        
+        $baktips_data[] = [
+            'titel'      => get_the_title($tip->ID),
+            'content'    => $content_ruw,
+            'afbeelding' => get_the_post_thumbnail_url($tip->ID, 'large') ?: ''
+        ];
+    }
+
     $recepten_count = count($recepten);
+    $baktips_count = count($baktips);
     ?>
     <div class="wrap">
         <h1>📄 Recepten exporteren naar PowerPoint (via PptxGenJS)</h1>
         <p>Exporteert alle gepubliceerde recepten naar één PowerPoint-bestand. Het genereren gebeurt supersnel lokaal in je browser, inclusief perfecte auto-paginering!</p>
 
         <div style="margin-top: 30px;">
-            <?php if ($recepten_count > 0) : ?>
+            <?php if ($recepten_count > 0 || $baktips_count > 0) : ?>
                 <button id="rick-start-export" class="button button-primary button-hero">
-                    ⬇️ Start Export (<?php echo $recepten_count; ?> recepten)
+                    ⬇️ Start Export (<?php echo $recepten_count; ?> recepten, <?php echo $baktips_count; ?> baktips)
                 </button>
                 <span id="rick-export-status" style="margin-left: 15px; font-style: italic; color: #666;"></span>
             <?php else : ?>
-                <p><em>Geen gepubliceerde recepten gevonden om te exporteren.</em></p>
+                <p><em>Geen gepubliceerde content gevonden om te exporteren.</em></p>
             <?php endif; ?>
         </div>
     </div>
@@ -123,7 +146,8 @@ function rick_ppt_export_page() {
     <script>
     // Data direct beschikbaar maken
     window.RickPptData = {
-        recepten: <?php echo json_encode($recepten_data); ?>
+        recepten: <?php echo json_encode($recepten_data); ?>,
+        baktips: <?php echo json_encode($baktips_data); ?>
     };
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -353,6 +377,59 @@ function rick_ppt_export_page() {
                 }
 
             }); // end forEach recept
+
+            // -- HANDIGE BAKTIPS (Achterin het boek) --
+            var baktips = window.RickPptData.baktips;
+            if (baktips && baktips.length > 0) {
+                // Introductie slide voor baktips
+                var tipIntroSlide = pptx.addSlide();
+                tipIntroSlide.background = { color: 'F9FAFB' };
+                tipIntroSlide.addText("Handige Baktips", {
+                    x: '10%', y: '40%', w: '80%', h: 1,
+                    fontFace: 'Segoe UI', fontSize: 36, bold: true, color: 'D97706', align: 'center'
+                });
+
+                // Master voor baktips
+                var tipMasterName = "MASTER_BAKTIP";
+                pptx.defineSlideMaster({
+                    title: tipMasterName,
+                    background: { color: C_BG },
+                    objects: [
+                        { rect: { x:0.39, y:0.39, w:7.72, h:11.15, fill: { color: C_CARD }, roundness: 0.1, line: { color:'E5E7EB', width:1 } } },
+                        // Kleine decoratieve header
+                        { rect: { x:0.39, y:0.39, w:7.72, h:0.5, fill: { color: 'FEF3C7' }, roundness: 0.1 } },
+                        { text: { text: "💡 Handige Baktip", options: { x:0.5, y:0.45, w:3, h:0.4, fontFace:'Segoe UI', fontSize:14, bold:true, color:'D97706' } } }
+                    ]
+                });
+
+                baktips.forEach(function(tip) {
+                    var slide = pptx.addSlide({ masterName: tipMasterName });
+                    var tY = 1.2;
+
+                    slide.addText(tip.titel, {
+                        x: 0.8, y: tY, w: 6.9, h: 0.8,
+                        fontFace: 'Segoe UI', fontSize: 24, bold: true, color: '2C2C2C', valign: 'top'
+                    });
+                    tY += 0.8;
+
+                    if (tip.afbeelding) {
+                        slide.addImage({
+                            path: tip.afbeelding,
+                            x: 0.8, y: tY, w: 6.9, h: 3.5,
+                            sizing: { type: 'contain', w: 6.9, h: 3.5 }
+                        });
+                        tY += 3.8;
+                    }
+
+                    if (tip.content) {
+                        slide.addText(tip.content, {
+                            x: 0.8, y: tY, w: 6.9, h: 11 - tY,
+                            fontFace: 'Segoe UI', fontSize: 12, color: '2C2C2C', valign: 'top',
+                            autoPage: true
+                        });
+                    }
+                });
+            }
 
             // Save
             var date = new Date();

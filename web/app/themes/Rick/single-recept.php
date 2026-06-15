@@ -16,6 +16,21 @@ if ( have_posts() ) :
         ?>
         <div class="recipe-container" style="--primary-color: <?php echo esc_attr( $recipe_color ); ?>;">
             <div class="recipe-print-actions">
+                <div class="recipe-categories">
+                    <?php
+                    $terms = get_the_terms(get_the_ID(), 'recept_categorie');
+                    if (!empty($terms) && !is_wp_error($terms)) :
+                        foreach ($terms as $term) :
+                            $color = get_term_meta($term->term_id, 'rick_category_color', true);
+                            $color = $color ? $color : '#d97706';
+                            ?>
+                            <span class="category-pill" style="background-color: <?php echo esc_attr($color); ?>;">
+                                <?php echo esc_html($term->name); ?>
+                            </span>
+                        <?php endforeach;
+                    endif;
+                    ?>
+                </div>
                 <button class="recipe-print-actions__button" type="button" onclick="window.print()">Print als fotoboek</button>
             </div>
 
