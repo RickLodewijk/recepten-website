@@ -176,6 +176,17 @@ h2 {
     background-color: #ffedd5;
 }
 
+.nutrition{
+    display:flex;
+    flex-direction: row;
+    gap: 20px;
+    padding-left: 15px;
+    border-radius: 0 8px 8px 0;
+    strong{
+        color: var(--primary-color);
+    }
+}
+
 .steps {
     display: block;
 }

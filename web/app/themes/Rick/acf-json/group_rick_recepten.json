@@ -148,6 +148,86 @@
             "rows": 4,
             "placeholder": "",
             "new_lines": "br"
+        },
+        {
+            "key": "field_rick_kcal",
+            "label": "Energie (kcal)",
+            "name": "kcal",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Bijv: 350 kcal",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_rick_eiwitten",
+            "label": "Eiwitten (g)",
+            "name": "eiwitten",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Bijv: 25 g",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_rick_koolhydraten",
+            "label": "Koolhydraten (g)",
+            "name": "koolhydraten",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Bijv: 15 g",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_rick_vetten",
+            "label": "Vetten (g)",
+            "name": "vetten",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Bijv: 10 g",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -171,5 +251,5 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "modified": 1781087532
+    "modified": 1782240978
 }
