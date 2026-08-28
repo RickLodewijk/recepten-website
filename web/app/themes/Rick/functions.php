@@ -9,14 +9,54 @@ require_once get_theme_file_path('inc/recepten/helpers.php');
 function rick_setup() {
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
+    add_theme_support('menus');
     add_theme_support('html5', array('search-form','comment-form','comment-list','gallery','caption'));
+    register_nav_menus(array(
+        'primary' => __('Primary Menu', 'rick'),
+    ));
 }
 add_action('after_setup_theme','rick_setup');
+
+function rick_primary_menu_fallback() {
+    $items = array(
+        array(
+            'label' => __('Home', 'rick'),
+            'url' => home_url('/'),
+            'active' => is_front_page(),
+        ),
+        array(
+            'label' => __('Recepten', 'rick'),
+            'url' => get_post_type_archive_link('recept'),
+            'active' => is_post_type_archive('recept') || is_singular('recept'),
+        ),
+        array(
+            'label' => __('Baktips', 'rick'),
+            'url' => get_post_type_archive_link('baktip'),
+            'active' => is_post_type_archive('baktip') || is_singular('baktip'),
+        ),
+    );
+
+    echo '<ul class="primary-menu">';
+
+    foreach ($items as $item) {
+        $class = $item['active'] ? ' class="current-menu-item"' : '';
+        echo '<li' . $class . '><a href="' . esc_url($item['url']) . '">' . esc_html($item['label']) . '</a></li>';
+    }
+
+    echo '</ul>';
+}
 
 function rick_enqueue_assets() {
     $theme_version = wp_get_theme()->get('Version');
 
     wp_enqueue_style('rick-style', get_stylesheet_uri(), array(), $theme_version);
+
+    wp_register_script('rick-navigation', '', array(), $theme_version, true);
+    wp_enqueue_script('rick-navigation');
+    wp_add_inline_script(
+        'rick-navigation',
+        "document.addEventListener('DOMContentLoaded', function () {\n            const toggle = document.querySelector('[data-menu-toggle]');\n            const nav = document.querySelector('[data-primary-nav]');\n            if (!toggle || !nav) { return; }\n\n            toggle.addEventListener('click', function () {\n                const expanded = toggle.getAttribute('aria-expanded') === 'true';\n                toggle.setAttribute('aria-expanded', String(!expanded));\n                nav.classList.toggle('is-open', !expanded);\n            });\n        });"
+    );
 
     if (is_front_page()) {
         $home_css_rel = 'assets/css/home.css';
