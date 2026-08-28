@@ -1,5 +1,9 @@
 FROM php:8.2-apache
 
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         libfreetype6-dev \
@@ -26,4 +30,7 @@ RUN apt-get update \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
 WORKDIR /var/www/html
+COPY composer.json composer.lock ./
+RUN composer install --no-interaction --no-dev --prefer-dist --optimize-autoloader
+
 COPY . /var/www/html
