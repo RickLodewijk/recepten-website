@@ -5,6 +5,7 @@ require_once get_theme_file_path('inc/post-types/pepernoten.php');
 require_once get_theme_file_path('inc/taxonomies/recept-categorie.php');
 require_once get_theme_file_path('inc/admin/recepten-meta-boxes.php');
 require_once get_theme_file_path('inc/admin/baktips-acf.php');
+require_once get_theme_file_path('inc/admin/pepernoten-acf.php');
 require_once get_theme_file_path('inc/admin/pepernoten-meta-boxes.php');
 require_once get_theme_file_path('inc/recepten/helpers.php');
 

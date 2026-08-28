@@ -4,12 +4,12 @@ get_header();
 if ( have_posts() ) :
     while ( have_posts() ) :
         the_post();
-        $score = get_post_meta( get_the_ID(), 'pepernoot_score', true );
-        $subtitle = get_post_meta( get_the_ID(), 'pepernoot_subtitle', true );
-        $image = get_post_meta( get_the_ID(), 'pepernoot_afbeelding', true );
-        $intro = get_post_meta( get_the_ID(), 'pepernoot_intro', true );
-        $pluspunten = get_post_meta( get_the_ID(), 'pepernoot_pluspunten', true );
-        $minpunten = get_post_meta( get_the_ID(), 'pepernoot_minpunten', true );
+        $score = get_field( 'pepernoot_score' );
+        $subtitle = get_field( 'pepernoot_subtitle' );
+        $image = get_field( 'pepernoot_afbeelding' );
+        $intro = get_field( 'pepernoot_intro' );
+        $pluspunten = get_field( 'pepernoot_pluspunten' );
+        $minpunten = get_field( 'pepernoot_minpunten' );
         ?>
         <article class="recipe-container pepernoot-container">
             <div class="header<?php echo $image ? ' has-image' : ''; ?>">
