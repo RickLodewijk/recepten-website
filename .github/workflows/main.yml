@@ -1,0 +1,39 @@
+name: 🚀 Deploy Bedrock naar InfinityFree
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  web-deploy:
+    name: 🎉 Build & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Haal de nieuwste code op
+        uses: actions/checkout@v4
+
+      - name: ⚙️ PHP instellen
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, json, gd
+
+      - name: 📦 Composer dependencies installeren (Bedrock Core)
+        run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+
+      - name: 📂 Bestanden synchroniseren via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /htdocs/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .env
+            .env.example
+            README.md
