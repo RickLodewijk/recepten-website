@@ -56,14 +56,16 @@ function rick_primary_menu_fallback() {
 
 function rick_enqueue_assets() {
     $theme_version = wp_get_theme()->get('Version');
+    $app_js_rel = 'app.js';
+    $app_js_abs = get_theme_file_path($app_js_rel);
 
     wp_enqueue_style('rick-style', get_stylesheet_uri(), array(), $theme_version);
-
-    wp_register_script('rick-navigation', '', array(), $theme_version, true);
-    wp_enqueue_script('rick-navigation');
-    wp_add_inline_script(
-        'rick-navigation',
-        "document.addEventListener('DOMContentLoaded', function () {\n            const toggle = document.querySelector('[data-menu-toggle]');\n            const nav = document.querySelector('[data-primary-nav]');\n            if (!toggle || !nav) { return; }\n\n            toggle.addEventListener('click', function () {\n                const expanded = toggle.getAttribute('aria-expanded') === 'true';\n                toggle.setAttribute('aria-expanded', String(!expanded));\n                nav.classList.toggle('is-open', !expanded);\n            });\n        });"
+    wp_enqueue_script(
+        'rick-app',
+        get_theme_file_uri($app_js_rel),
+        array(),
+        file_exists($app_js_abs) ? filemtime($app_js_abs) : $theme_version,
+        true
     );
 
     if (is_front_page()) {

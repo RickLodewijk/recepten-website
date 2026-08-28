@@ -366,7 +366,28 @@ get_header();
 
 
   <!-- Hoofd Container -->
+<!-- Hoofd Container -->
 <section class="pn-container">
+
+    <!-- Zoekbalk en Sorteer Controls -->
+    <div class="pn-controls">
+      <input type="text" placeholder="Zoek op merk, winkel of smaak..." class="pn-input">
+      <select class="pn-select">
+        <option>Hoogste cijfer</option>
+        <option>Laagste cijfer</option>
+        <option>Laagste prijs</option>
+      </select>
+    </div>
+
+    <?php
+    $query = new WP_Query(array(
+      'post_type'      => 'pepernoot',
+      'posts_per_page' => -1,
+      'post_status'    => 'publish',
+      'orderby'        => 'date',
+      'order'          => 'DESC',
+    ));
+    ?>
 
     <?php
     $query = new WP_Query(array(
