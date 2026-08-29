@@ -21,10 +21,6 @@
     }
   },
   "attributes": {
-    "align": {
-      "type": "string",
-      "default": "full"
-    },
     "title": {
       "type": "string",
       "default": "Ontdek Heerlijke Recepten"

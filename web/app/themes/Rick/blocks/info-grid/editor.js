@@ -18,6 +18,7 @@
             } = attributes;
 
             const [mode, setMode] = useState('edit');
+            const [isCollapsed, setIsCollapsed] = useState(false);
 
             const blockProps = (typeof useBlockProps === 'function')
                 ? useBlockProps({ className: 'rick-block-wrapper' })
@@ -54,8 +55,44 @@
                         isPressed: mode === 'edit',
                         onClick: function () {
                             setMode(mode === 'edit' ? 'preview' : 'edit');
+                            if (isCollapsed) setIsCollapsed(false);
+                        },
+                    }),
+                    ToolbarButton && el(ToolbarButton, {
+                        icon: isCollapsed ? 'arrow-down-alt2' : 'arrow-up-alt2',
+                        label: isCollapsed ? 'Klap blok uit' : 'Klap blok in',
+                        onClick: function () {
+                            setIsCollapsed(!isCollapsed);
                         },
                     })
+                )
+            );
+
+            // Inklapbalk weergave
+            const collapsedView = el(
+                'div',
+                {
+                    className: 'acf-block-collapsed-bar',
+                    onClick: function () { setIsCollapsed(false); }
+                },
+                el('div', { className: 'acf-block-header__title' },
+                    el('span', { className: 'dashicons dashicons-grid-view acf-block-header__icon' }),
+                    el('strong', null, 'Informatie Kaarten Grid'),
+                    title && el('span', { className: 'acf-block-collapsed-title' }, '— ' + title),
+                    el('span', { className: 'acf-block-header__tag' }, 'Ingeklapt')
+                ),
+                el(
+                    'button',
+                    {
+                        type: 'button',
+                        className: 'acf-btn-collapse',
+                        onClick: function (e) {
+                            e.stopPropagation();
+                            setIsCollapsed(false);
+                        }
+                    },
+                    el('span', { className: 'dashicons dashicons-arrow-down-alt2' }),
+                    ' Uitklappen'
                 )
             );
 
@@ -72,14 +109,28 @@
                         el('span', { className: 'acf-block-header__tag' }, 'ACF Velden')
                     ),
                     el(
-                        'button',
-                        {
-                            type: 'button',
-                            className: 'acf-btn-preview',
-                            onClick: function () { setMode('preview'); }
-                        },
-                        el('span', { className: 'dashicons dashicons-visibility' }),
-                        ' Voorbeeld bekijken'
+                        'div',
+                        { className: 'acf-block-header__actions' },
+                        el(
+                            'button',
+                            {
+                                type: 'button',
+                                className: 'acf-btn-preview',
+                                onClick: function () { setMode('preview'); }
+                            },
+                            el('span', { className: 'dashicons dashicons-visibility' }),
+                            ' Voorbeeld'
+                        ),
+                        el(
+                            'button',
+                            {
+                                type: 'button',
+                                className: 'acf-btn-collapse',
+                                onClick: function () { setIsCollapsed(true); }
+                            },
+                            el('span', { className: 'dashicons dashicons-arrow-up-alt2' }),
+                            ' Inklappen'
+                        )
                     )
                 ),
                 el(
@@ -226,17 +277,34 @@
                     )
                 ),
                 el(
-                    'button',
-                    {
-                        type: 'button',
-                        className: 'acf-preview-edit-overlay-btn',
-                        onClick: function (e) {
-                            e.stopPropagation();
-                            setMode('edit');
-                        }
-                    },
-                    el('span', { className: 'dashicons dashicons-edit' }),
-                    ' Bewerk ACF Velden'
+                    'div',
+                    { className: 'acf-preview-actions-overlay' },
+                    el(
+                        'button',
+                        {
+                            type: 'button',
+                            className: 'acf-preview-edit-overlay-btn',
+                            onClick: function (e) {
+                                e.stopPropagation();
+                                setMode('edit');
+                            }
+                        },
+                        el('span', { className: 'dashicons dashicons-edit' }),
+                        ' Bewerk ACF Velden'
+                    ),
+                    el(
+                        'button',
+                        {
+                            type: 'button',
+                            className: 'acf-preview-collapse-overlay-btn',
+                            onClick: function (e) {
+                                e.stopPropagation();
+                                setIsCollapsed(true);
+                            }
+                        },
+                        el('span', { className: 'dashicons dashicons-arrow-up-alt2' }),
+                        ' Inklappen'
+                    )
                 )
             );
 
@@ -244,7 +312,7 @@
                 Fragment,
                 null,
                 editToggleToolbar,
-                el('div', blockProps, mode === 'edit' ? acfFormView : previewView)
+                el('div', blockProps, isCollapsed ? collapsedView : (mode === 'edit' ? acfFormView : previewView))
             );
         },
         save: function () {

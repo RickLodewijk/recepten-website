@@ -25,6 +25,7 @@
             } = attributes;
 
             const [mode, setMode] = useState('edit');
+            const [isCollapsed, setIsCollapsed] = useState(false);
 
             const blockProps = (typeof useBlockProps === 'function')
                 ? useBlockProps({ className: 'rick-block-wrapper' })
@@ -66,6 +67,14 @@
                         isPressed: mode === 'edit',
                         onClick: function () {
                             setMode(mode === 'edit' ? 'preview' : 'edit');
+                            if (isCollapsed) setIsCollapsed(false);
+                        },
+                    }),
+                    ToolbarButton && el(ToolbarButton, {
+                        icon: isCollapsed ? 'arrow-down-alt2' : 'arrow-up-alt2',
+                        label: isCollapsed ? 'Klap blok uit' : 'Klap blok in',
+                        onClick: function () {
+                            setIsCollapsed(!isCollapsed);
                         },
                     })
                 )
@@ -76,9 +85,9 @@
                 null,
                 el(
                     PanelBody,
-                    { title: 'Header Instellingen', initialOpen: true },
+                    { title: 'Pageheader Layout', initialOpen: true },
                     SelectControl && el(SelectControl, {
-                        label: 'Weergave modus in editor',
+                        label: 'Weergave modus',
                         value: mode,
                         options: [
                             { label: '📝 ACF Velden Invoeren', value: 'edit' },
@@ -87,7 +96,17 @@
                         onChange: function (val) { setMode(val); },
                     }),
                     SelectControl && el(SelectControl, {
-                        label: 'Tekst uitlijning',
+                        label: 'Minimale Hoogte',
+                        value: minHeight,
+                        options: [
+                            { label: 'Groot (460px)', value: 'large' },
+                            { label: 'Middelgroot (360px)', value: 'medium' },
+                            { label: 'Compact (260px)', value: 'compact' },
+                        ],
+                        onChange: function (val) { setAttributes({ minHeight: val }); },
+                    }),
+                    SelectControl && el(SelectControl, {
+                        label: 'Tekst Uitlijning',
                         value: textAlign,
                         options: [
                             { label: 'Gecentreerd', value: 'center' },
@@ -97,25 +116,43 @@
                         onChange: function (val) { setAttributes({ textAlign: val }); },
                     }),
                     SelectControl && el(SelectControl, {
-                        label: 'Header hoogte',
-                        value: minHeight,
-                        options: [
-                            { label: 'Normaal (360px)', value: 'medium' },
-                            { label: 'Groot / Hero (460px)', value: 'large' },
-                            { label: 'Compact (260px)', value: 'compact' },
-                        ],
-                        onChange: function (val) { setAttributes({ minHeight: val }); },
-                    }),
-                    SelectControl && el(SelectControl, {
-                        label: 'Donkere overlay filter',
+                        label: 'Kleur Overlay (bij foto)',
                         value: overlayType,
                         options: [
-                            { label: 'Warme gradient (Aanbevolen)', value: 'warm-dark' },
-                            { label: 'Klassiek donker', value: 'dark' },
-                            { label: 'Warm amber goud', value: 'amber' },
+                            { label: 'Warm Donker (Aanbevolen)', value: 'warm-dark' },
+                            { label: 'Neutraal Donker', value: 'dark' },
+                            { label: 'Amber / Goud', value: 'amber' },
                         ],
                         onChange: function (val) { setAttributes({ overlayType: val }); },
                     })
+                )
+            );
+
+            // Inklapbalk weergave
+            const collapsedView = el(
+                'div',
+                {
+                    className: 'acf-block-collapsed-bar',
+                    onClick: function () { setIsCollapsed(false); }
+                },
+                el('div', { className: 'acf-block-header__title' },
+                    el('span', { className: 'dashicons dashicons-cover-image acf-block-header__icon' }),
+                    el('strong', null, 'Pageheader (Hero Banner)'),
+                    title && el('span', { className: 'acf-block-collapsed-title' }, '— ' + title),
+                    el('span', { className: 'acf-block-header__tag' }, 'Ingeklapt')
+                ),
+                el(
+                    'button',
+                    {
+                        type: 'button',
+                        className: 'acf-btn-collapse',
+                        onClick: function (e) {
+                            e.stopPropagation();
+                            setIsCollapsed(false);
+                        }
+                    },
+                    el('span', { className: 'dashicons dashicons-arrow-down-alt2' }),
+                    ' Uitklappen'
                 )
             );
 
@@ -127,83 +164,44 @@
                     'div',
                     { className: 'acf-block-header' },
                     el('div', { className: 'acf-block-header__title' },
-                        el('span', { className: 'dashicons dashicons-heading acf-block-header__icon' }),
-                        el('strong', null, 'Page Header'),
+                        el('span', { className: 'dashicons dashicons-cover-image acf-block-header__icon' }),
+                        el('strong', null, 'Pageheader (Hero Banner)'),
                         el('span', { className: 'acf-block-header__tag' }, 'ACF Velden')
                     ),
                     el(
-                        'button',
-                        {
-                            type: 'button',
-                            className: 'acf-btn-preview',
-                            onClick: function () { setMode('preview'); }
-                        },
-                        el('span', { className: 'dashicons dashicons-visibility' }),
-                        ' Voorbeeld bekijken'
+                        'div',
+                        { className: 'acf-block-header__actions' },
+                        el(
+                            'button',
+                            {
+                                type: 'button',
+                                className: 'acf-btn-preview',
+                                onClick: function () { setMode('preview'); }
+                            },
+                            el('span', { className: 'dashicons dashicons-visibility' }),
+                            ' Voorbeeld'
+                        ),
+                        el(
+                            'button',
+                            {
+                                type: 'button',
+                                className: 'acf-btn-collapse',
+                                onClick: function () { setIsCollapsed(true); }
+                            },
+                            el('span', { className: 'dashicons dashicons-arrow-up-alt2' }),
+                            ' Inklappen'
+                        )
                     )
                 ),
                 el(
                     'div',
                     { className: 'acf-fields-table' },
 
-                    // Veld: Achtergrondafbeelding URL
+                    // Veld: Badge / Label
                     el('div', { className: 'acf-field acf-field--text' },
                         el('div', { className: 'acf-label' },
-                            el('label', null, 'Achtergrondafbeelding URL (Sfeerfoto)'),
-                            el('p', { className: 'description' }, 'Plak de URL van een mooie sfeerfoto (of laat leeg voor een effen warme achtergrond).')
-                        ),
-                        el('div', { className: 'acf-input' },
-                            TextControl && el(TextControl, {
-                                value: bgImageUrl,
-                                placeholder: 'https://images.unsplash.com/... of /app/uploads/...',
-                                onChange: function (val) { setAttributes({ bgImageUrl: val }); },
-                            })
-                        )
-                    ),
-
-                    // Veld: Overlay & Hoogte
-                    el('div', { className: 'acf-fields-row' },
-                        el('div', { className: 'acf-field acf-field--select' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Overlay Filter Type'),
-                                el('p', { className: 'description' }, 'Filter over de achtergrondfoto voor perfecte leesbaarheid.')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                SelectControl && el(SelectControl, {
-                                    value: overlayType,
-                                    options: [
-                                        { label: 'Warme gradient (Aanbevolen)', value: 'warm-dark' },
-                                        { label: 'Klassiek donker', value: 'dark' },
-                                        { label: 'Warm amber goud', value: 'amber' },
-                                    ],
-                                    onChange: function (val) { setAttributes({ overlayType: val }); },
-                                })
-                            )
-                        ),
-                        el('div', { className: 'acf-field acf-field--select' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Header Hoogte'),
-                                el('p', { className: 'description' }, 'Kies de gewenste minimum hoogte.')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                SelectControl && el(SelectControl, {
-                                    value: minHeight,
-                                    options: [
-                                        { label: 'Normaal (360px)', value: 'medium' },
-                                        { label: 'Groot / Hero (460px)', value: 'large' },
-                                        { label: 'Compact (260px)', value: 'compact' },
-                                    ],
-                                    onChange: function (val) { setAttributes({ minHeight: val }); },
-                                })
-                            )
-                        )
-                    ),
-
-                    // Veld: Badge
-                    el('div', { className: 'acf-field acf-field--text' },
-                        el('div', { className: 'acf-label' },
-                            el('label', null, 'Badge / Label'),
-                            el('p', { className: 'description' }, 'Optioneel badge label boven de titel.')
+                            el('label', null, 'Badge / Label Boven Titel'),
+                            el('p', { className: 'description' }, 'Klein label boven de hoofdtitel.')
                         ),
                         el('div', { className: 'acf-input' },
                             TextControl && el(TextControl, {
@@ -214,16 +212,16 @@
                         )
                     ),
 
-                    // Veld: Paginatitel
+                    // Veld: Hoofdtitel
                     el('div', { className: 'acf-field acf-field--text acf-field--required' },
                         el('div', { className: 'acf-label' },
-                            el('label', null, 'Paginatitel ', el('span', { className: 'acf-required' }, '*')),
-                            el('p', { className: 'description' }, 'De grote hoofdtitel.')
+                            el('label', null, 'Hoofdtitel ', el('span', { className: 'acf-required' }, '*')),
+                            el('p', { className: 'description' }, 'De grote paginatitel.')
                         ),
                         el('div', { className: 'acf-input' },
                             TextControl && el(TextControl, {
                                 value: title,
-                                placeholder: 'Voer paginatitel in...',
+                                placeholder: 'bijv. Ontdek Heerlijke Recepten',
                                 onChange: function (val) { setAttributes({ title: val }); },
                             })
                         )
@@ -233,75 +231,57 @@
                     el('div', { className: 'acf-field acf-field--textarea' },
                         el('div', { className: 'acf-label' },
                             el('label', null, 'Subtitel / Introductie'),
-                            el('p', { className: 'description' }, 'Toelichtende tekst onder de titel.')
+                            el('p', { className: 'description' }, 'Korte toelichtende tekst onder de hoofdtitel.')
                         ),
                         el('div', { className: 'acf-input' },
                             TextareaControl && el(TextareaControl, {
                                 value: subtitle,
-                                rows: 2,
-                                placeholder: 'Voer een subtitel in...',
+                                rows: 3,
+                                placeholder: 'Voer een introductietekst in...',
                                 onChange: function (val) { setAttributes({ subtitle: val }); },
                             })
                         )
                     ),
 
-                    // Veld: Tekst Uitlijning
-                    el('div', { className: 'acf-field acf-field--select' },
+                    // Veld: Knoppen Repeater
+                    el('div', { className: 'acf-field acf-field--repeater' },
                         el('div', { className: 'acf-label' },
-                            el('label', null, 'Inhoud Uitlijning'),
-                            el('p', { className: 'description' }, 'Kies hoe de badge, titel en knoppen worden uitgelijnd.')
+                            el('label', null, 'Actieknoppen (Herhaler / Multi-buttons)'),
+                            el('p', { className: 'description' }, 'Voeg meerdere knoppen toe met eigen tekst, link en opmaakstijl.')
                         ),
                         el('div', { className: 'acf-input' },
-                            SelectControl && el(SelectControl, {
-                                value: textAlign,
-                                options: [
-                                    { label: 'Gecentreerd', value: 'center' },
-                                    { label: 'Links', value: 'left' },
-                                    { label: 'Rechts', value: 'right' },
-                                ],
-                                onChange: function (val) { setAttributes({ textAlign: val }); },
-                            })
-                        )
-                    ),
-
-                    // ACF Repeater: Actieknoppen
-                    el('div', { className: 'acf-field acf-repeater-field' },
-                        el('div', { className: 'acf-label' },
-                            el('label', null, 'Actieknoppen (Herhaler / Repeater)'),
-                            el('p', { className: 'description' }, 'Voeg één of meerdere knoppen toe met een eigen tekst, link en stijl.')
-                        ),
-                        el(
-                            'div',
-                            { className: 'acf-repeater-list' },
-                            buttons.map(function (btn, index) {
-                                return el(
-                                    'div',
-                                    { key: index, className: 'acf-repeater-item' },
-                                    el(
+                            el(
+                                'div',
+                                { className: 'acf-repeater-list' },
+                                buttons.map(function (btn, index) {
+                                    return el(
                                         'div',
-                                        { className: 'acf-repeater-item__header' },
-                                        el('span', { className: 'acf-repeater-item__num' }, '#' + (index + 1)),
-                                        el('strong', null, btn.text || 'Knop ' + (index + 1)),
+                                        { key: index, className: 'acf-repeater-item' },
                                         el(
-                                            'button',
-                                            {
-                                                type: 'button',
-                                                className: 'acf-repeater-remove-btn',
-                                                title: 'Verwijder knop',
-                                                onClick: function () { removeButton(index); }
-                                            },
-                                            '✕ Verwijderen'
-                                        )
-                                    ),
-                                    el(
-                                        'div',
-                                        { className: 'acf-repeater-item__body' },
-                                        el('div', { className: 'acf-fields-row' },
+                                            'div',
+                                            { className: 'acf-repeater-item__header' },
+                                            el('span', null,
+                                                el('span', { className: 'acf-repeater-item__num' }, index + 1),
+                                                el('strong', null, btn.text || 'Knop ' + (index + 1))
+                                            ),
+                                            el(
+                                                'button',
+                                                {
+                                                    type: 'button',
+                                                    className: 'acf-repeater-remove-btn',
+                                                    onClick: function () { removeButton(index); }
+                                                },
+                                                '✕ Verwijderen'
+                                            )
+                                        ),
+                                        el(
+                                            'div',
+                                            { className: 'acf-fields-row' },
                                             el('div', { className: 'acf-field' },
                                                 el('div', { className: 'acf-label' }, el('label', null, 'Knop Tekst')),
                                                 el('div', { className: 'acf-input' },
                                                     TextControl && el(TextControl, {
-                                                        value: btn.text || '',
+                                                        value: btn.text,
                                                         placeholder: 'bijv. Bekijk Recepten',
                                                         onChange: function (val) { updateButton(index, 'text', val); }
                                                     })
@@ -311,8 +291,8 @@
                                                 el('div', { className: 'acf-label' }, el('label', null, 'Link URL')),
                                                 el('div', { className: 'acf-input' },
                                                     TextControl && el(TextControl, {
-                                                        value: btn.url || '',
-                                                        placeholder: 'bijv. /recepten/',
+                                                        value: btn.url,
+                                                        placeholder: 'bijv. /recepten/ of https://...',
                                                         onChange: function (val) { updateButton(index, 'url', val); }
                                                     })
                                                 )
@@ -323,18 +303,18 @@
                                                     SelectControl && el(SelectControl, {
                                                         value: btn.style || 'primary',
                                                         options: [
-                                                            { label: 'Primair (Gevuld Amber)', value: 'primary' },
+                                                            { label: 'Primair (Goud / Amber)', value: 'primary' },
                                                             { label: 'Secundair (Glazen Rand)', value: 'secondary' },
-                                                            { label: 'Wit (Gevuld)', value: 'white' },
+                                                            { label: 'Wit (Helder)', value: 'white' },
                                                         ],
                                                         onChange: function (val) { updateButton(index, 'style', val); }
                                                     })
                                                 )
                                             )
                                         )
-                                    )
-                                );
-                            }),
+                                    );
+                                })
+                            ),
                             el(
                                 'button',
                                 {
@@ -342,38 +322,43 @@
                                     className: 'acf-add-row-btn',
                                     onClick: addButton
                                 },
-                                '+ Knop toevoegen (Nieuwe Actieknop)'
+                                '+ Voeg Knop Toe'
                             )
+                        )
+                    ),
+
+                    // Veld: Achtergrondafbeelding URL
+                    el('div', { className: 'acf-field acf-field--text' },
+                        el('div', { className: 'acf-label' },
+                            el('label', null, 'Achtergrondafbeelding URL'),
+                            el('p', { className: 'description' }, 'Directe link naar achtergrondfoto. Laat leeg voor rustige warme achtergrond.')
+                        ),
+                        el('div', { className: 'acf-input' },
+                            TextControl && el(TextControl, {
+                                value: bgImageUrl,
+                                placeholder: 'https://...',
+                                onChange: function (val) { setAttributes({ bgImageUrl: val }); },
+                            })
                         )
                     )
                 )
             );
 
             // Preview View
-            const hasBg = !!bgImageUrl;
-            const previewClasses = [
-                'rick-pageheader',
-                'is-align-' + textAlign,
-                'is-height-' + minHeight,
-                hasBg ? ('has-bg-image overlay-' + overlayType) : 'no-bg-image'
-            ].join(' ');
-
             const previewView = el(
                 'div',
                 { className: 'rick-block-preview-wrapper' },
                 el(
                     'div',
                     {
-                        className: previewClasses,
-                        style: hasBg ? { backgroundImage: 'url(' + bgImageUrl + ')' } : {}
+                        className: 'rick-pageheader is-align-' + textAlign + ' is-height-' + minHeight + ' ' + (bgImageUrl ? 'has-bg-image overlay-' + overlayType : 'no-bg-image'),
+                        style: bgImageUrl ? { backgroundImage: 'url(' + bgImageUrl + ')' } : {}
                     },
-                    el('div', { className: 'rick-pageheader__overlay' }),
+                    bgImageUrl && el('div', { className: 'rick-pageheader__overlay' }),
                     el(
                         'div',
-                        { className: 'container rick-pageheader__container' },
-                        badge && el(
-                            'div',
-                            { className: 'rick-pageheader__badge-wrapper' },
+                        { className: 'rick-pageheader__container' },
+                        badge && el('div', { className: 'rick-pageheader__badge-wrapper' },
                             el('span', { className: 'rick-pageheader__badge' }, badge)
                         ),
                         title && el('h1', { className: 'rick-pageheader__title' }, title),
@@ -382,12 +367,13 @@
                             'div',
                             { className: 'rick-pageheader__actions' },
                             buttons.map(function (btn, index) {
-                                if (!btn.text) return null;
-                                const btnClass = 'button rick-pageheader__button rick-pageheader__button--' + (btn.style || 'primary');
                                 return el(
                                     'span',
-                                    { key: index, className: btnClass },
-                                    el('span', null, btn.text),
+                                    {
+                                        key: index,
+                                        className: 'button rick-pageheader__button rick-pageheader__button--' + (btn.style || 'primary')
+                                    },
+                                    btn.text || 'Knop',
                                     el('span', { className: 'rick-pageheader__button-arrow' }, ' →')
                                 );
                             })
@@ -395,17 +381,34 @@
                     )
                 ),
                 el(
-                    'button',
-                    {
-                        type: 'button',
-                        className: 'acf-preview-edit-overlay-btn',
-                        onClick: function (e) {
-                            e.stopPropagation();
-                            setMode('edit');
-                        }
-                    },
-                    el('span', { className: 'dashicons dashicons-edit' }),
-                    ' Bewerk ACF Velden'
+                    'div',
+                    { className: 'acf-preview-actions-overlay' },
+                    el(
+                        'button',
+                        {
+                            type: 'button',
+                            className: 'acf-preview-edit-overlay-btn',
+                            onClick: function (e) {
+                                e.stopPropagation();
+                                setMode('edit');
+                            }
+                        },
+                        el('span', { className: 'dashicons dashicons-edit' }),
+                        ' Bewerk ACF Velden'
+                    ),
+                    el(
+                        'button',
+                        {
+                            type: 'button',
+                            className: 'acf-preview-collapse-overlay-btn',
+                            onClick: function (e) {
+                                e.stopPropagation();
+                                setIsCollapsed(true);
+                            }
+                        },
+                        el('span', { className: 'dashicons dashicons-arrow-up-alt2' }),
+                        ' Inklappen'
+                    )
                 )
             );
 
@@ -414,7 +417,7 @@
                 null,
                 editToggleToolbar,
                 sidebarControls,
-                el('div', blockProps, mode === 'edit' ? acfFormView : previewView)
+                el('div', blockProps, isCollapsed ? collapsedView : (mode === 'edit' ? acfFormView : previewView))
             );
         },
         save: function () {

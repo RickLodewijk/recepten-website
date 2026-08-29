@@ -1,9 +1,25 @@
 /* ==========================================================================
-   ACF Fields Container in Gutenberg Block Editor
+   ACF Fields Container in Gutenberg Block Editor (Compact & Centered)
    ========================================================================== */
 .acf-block-fields-container,
 .acf-block-fields-container * {
     box-sizing: border-box !important;
+}
+
+.rick-block-wrapper {
+    max-width: 840px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.wp-block[data-type="rick/pageheader"],
+.wp-block-rick-pageheader {
+    max-width: 840px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
 }
 
 .acf-block-fields-container {
@@ -12,7 +28,8 @@
     border: 1px solid #c3c4c7 !important;
     border-radius: 8px !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
-    margin: 15px 0 !important;
+    margin: 15px auto !important;
+    max-width: 840px !important;
     overflow: hidden !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
     text-align: left !important;
@@ -20,11 +37,67 @@
     display: block !important;
 }
 
+/* Inklapbalk (Collapsed state) */
+.acf-block-collapsed-bar {
+    background: #ffffff !important;
+    border: 1px solid #c3c4c7 !important;
+    border-left: 4px solid #d97706 !important;
+    border-radius: 8px !important;
+    padding: 12px 18px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    margin: 12px auto !important;
+    max-width: 840px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.15s ease !important;
+}
+
+.acf-block-collapsed-bar:hover {
+    background: #fffdf8 !important;
+    border-color: #d97706 !important;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15) !important;
+}
+
+.acf-block-collapsed-title {
+    font-size: 13px !important;
+    color: #646970 !important;
+    font-weight: 500 !important;
+    margin-left: 6px !important;
+    max-width: 320px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+}
+
+.acf-btn-collapse {
+    background: #f6f7f7 !important;
+    border: 1px solid #c3c4c7 !important;
+    color: #3c434a !important;
+    border-radius: 5px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    transition: all 0.15s ease !important;
+}
+
+.acf-btn-collapse:hover {
+    background: #2271b1 !important;
+    color: #ffffff !important;
+    border-color: #2271b1 !important;
+}
+
 /* ACF Header */
 .acf-block-header {
     background: #f6f7f7 !important;
     border-bottom: 1px solid #dcdcde !important;
-    padding: 14px 18px !important;
+    padding: 12px 18px !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -40,7 +113,7 @@
 }
 
 .acf-block-header__icon {
-    color: #2271b1 !important;
+    color: #d97706 !important;
     font-size: 20px !important;
     width: 20px !important;
     height: 20px !important;
@@ -52,9 +125,15 @@
     border: 1px solid #bae6fd !important;
     font-size: 11px !important;
     font-weight: 700 !important;
-    padding: 3px 8px !important;
+    padding: 2px 7px !important;
     border-radius: 4px !important;
     text-transform: uppercase !important;
+}
+
+.acf-block-header__actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
 }
 
 .acf-btn-preview {
@@ -257,13 +336,20 @@
     border-radius: 8px !important;
     padding: 6px !important;
     overflow: hidden !important;
-    margin: 15px 0 !important;
+    margin: 15px auto !important;
+    max-width: 840px !important;
+}
+
+.acf-preview-actions-overlay {
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    display: flex !important;
+    gap: 8px !important;
+    z-index: 20 !important;
 }
 
 .acf-preview-edit-overlay-btn {
-    position: absolute !important;
-    top: 20px !important;
-    right: 20px !important;
     background: rgba(17, 24, 39, 0.9) !important;
     backdrop-filter: blur(6px) !important;
     color: #ffffff !important;
@@ -273,7 +359,6 @@
     font-size: 13px !important;
     font-weight: 600 !important;
     cursor: pointer !important;
-    z-index: 20 !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -286,10 +371,35 @@
     transform: translateY(-1px) !important;
 }
 
+.acf-preview-collapse-overlay-btn {
+    background: rgba(17, 24, 39, 0.85) !important;
+    backdrop-filter: blur(6px) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 6px !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    transition: all 0.15s ease !important;
+}
+
+.acf-preview-collapse-overlay-btn:hover {
+    background: #374151 !important;
+}
+
 /* Pageheader preview weergave binnen editor */
 .rick-pageheader {
     position: relative;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    left: auto !important;
+    right: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -301,24 +411,24 @@
 }
 
 .rick-pageheader.is-height-large {
-    min-height: 380px;
-    padding: 60px 20px;
+    min-height: 220px !important;
+    padding: 35px 20px !important;
 }
 
 .rick-pageheader.is-height-medium {
-    min-height: 300px;
-    padding: 45px 20px;
+    min-height: 180px !important;
+    padding: 28px 20px !important;
 }
 
 .rick-pageheader.is-height-compact {
-    min-height: 220px;
-    padding: 30px 20px;
+    min-height: 140px !important;
+    padding: 20px 20px !important;
 }
 
 .rick-pageheader__container {
     position: relative;
     z-index: 2;
-    max-width: 1100px;
+    max-width: 780px;
     margin: 0 auto;
     width: 100%;
 }
@@ -369,7 +479,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .rick-pageheader.no-bg-image .rick-pageheader__badge {
@@ -383,9 +493,9 @@
 }
 
 .rick-pageheader__title {
-    font-size: 2.3rem;
+    font-size: 1.85rem !important;
     font-weight: 800;
-    margin: 0 0 10px 0;
+    margin: 0 0 8px 0;
 }
 
 .rick-pageheader.no-bg-image .rick-pageheader__title {
@@ -397,9 +507,9 @@
 }
 
 .rick-pageheader__subtitle {
-    font-size: 1.05rem;
-    max-width: 700px;
-    margin: 0 auto 20px auto;
+    font-size: 0.95rem !important;
+    max-width: 650px;
+    margin: 0 auto 16px auto;
 }
 
 .rick-pageheader.no-bg-image .rick-pageheader__subtitle {
@@ -411,10 +521,10 @@
 }
 
 .rick-pageheader__actions {
-    margin-top: 24px;
+    margin-top: 18px;
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
 }
 
@@ -433,12 +543,12 @@
 .rick-pageheader__button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
+    gap: 6px;
+    padding: 9px 18px;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .rick-pageheader__button--primary {

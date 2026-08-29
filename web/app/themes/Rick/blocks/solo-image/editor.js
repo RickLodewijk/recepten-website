@@ -19,6 +19,7 @@
             } = attributes;
 
             const [mode, setMode] = useState('edit');
+            const [isCollapsed, setIsCollapsed] = useState(false);
 
             const blockProps = (typeof useBlockProps === 'function')
                 ? useBlockProps({ className: 'rick-block-wrapper' })
@@ -36,8 +37,44 @@
                         isPressed: mode === 'edit',
                         onClick: function () {
                             setMode(mode === 'edit' ? 'preview' : 'edit');
+                            if (isCollapsed) setIsCollapsed(false);
+                        },
+                    }),
+                    ToolbarButton && el(ToolbarButton, {
+                        icon: isCollapsed ? 'arrow-down-alt2' : 'arrow-up-alt2',
+                        label: isCollapsed ? 'Klap blok uit' : 'Klap blok in',
+                        onClick: function () {
+                            setIsCollapsed(!isCollapsed);
                         },
                     })
+                )
+            );
+
+            // Inklapbalk weergave
+            const collapsedView = el(
+                'div',
+                {
+                    className: 'acf-block-collapsed-bar',
+                    onClick: function () { setIsCollapsed(false); }
+                },
+                el('div', { className: 'acf-block-header__title' },
+                    el('span', { className: 'dashicons dashicons-format-image acf-block-header__icon' }),
+                    el('strong', null, 'Solo Afbeelding / Banner'),
+                    overlayTitle && el('span', { className: 'acf-block-collapsed-title' }, '— ' + overlayTitle),
+                    el('span', { className: 'acf-block-header__tag' }, 'Ingeklapt')
+                ),
+                el(
+                    'button',
+                    {
+                        type: 'button',
+                        className: 'acf-btn-collapse',
+                        onClick: function (e) {
+                            e.stopPropagation();
+                            setIsCollapsed(false);
+                        }
+                    },
+                    el('span', { className: 'dashicons dashicons-arrow-down-alt2' }),
+                    ' Uitklappen'
                 )
             );
 
@@ -50,18 +87,32 @@
                     { className: 'acf-block-header' },
                     el('div', { className: 'acf-block-header__title' },
                         el('span', { className: 'dashicons dashicons-format-image acf-block-header__icon' }),
-                        el('strong', null, 'Afbeeldingsbanner / Solo Afbeelding'),
+                        el('strong', null, 'Solo Afbeelding / Banner'),
                         el('span', { className: 'acf-block-header__tag' }, 'ACF Velden')
                     ),
                     el(
-                        'button',
-                        {
-                            type: 'button',
-                            className: 'acf-btn-preview',
-                            onClick: function () { setMode('preview'); }
-                        },
-                        el('span', { className: 'dashicons dashicons-visibility' }),
-                        ' Voorbeeld bekijken'
+                        'div',
+                        { className: 'acf-block-header__actions' },
+                        el(
+                            'button',
+                            {
+                                type: 'button',
+                                className: 'acf-btn-preview',
+                                onClick: function () { setMode('preview'); }
+                            },
+                            el('span', { className: 'dashicons dashicons-visibility' }),
+                            ' Voorbeeld'
+                        ),
+                        el(
+                            'button',
+                            {
+                                type: 'button',
+                                className: 'acf-btn-collapse',
+                                onClick: function () { setIsCollapsed(true); }
+                            },
+                            el('span', { className: 'dashicons dashicons-arrow-up-alt2' }),
+                            ' Inklappen'
+                        )
                     )
                 ),
                 el(
@@ -102,7 +153,7 @@
                     el('div', { className: 'acf-field acf-field--text' },
                         el('div', { className: 'acf-label' },
                             el('label', null, 'Overlay Titel (Optioneel)'),
-                            el('p', { className: 'description' }, 'Tekst die onderaan over de afbeelding heen valt. Laat leeg voor puur foto.')
+                            el('p', { className: 'description' }, 'Tekst die over de afbeelding heen valt. Laat leeg voor puur foto.')
                         ),
                         el('div', { className: 'acf-input' },
                             TextControl && el(TextControl, {
@@ -149,17 +200,34 @@
                     )
                 ),
                 el(
-                    'button',
-                    {
-                        type: 'button',
-                        className: 'acf-preview-edit-overlay-btn',
-                        onClick: function (e) {
-                            e.stopPropagation();
-                            setMode('edit');
-                        }
-                    },
-                    el('span', { className: 'dashicons dashicons-edit' }),
-                    ' Bewerk ACF Velden'
+                    'div',
+                    { className: 'acf-preview-actions-overlay' },
+                    el(
+                        'button',
+                        {
+                            type: 'button',
+                            className: 'acf-preview-edit-overlay-btn',
+                            onClick: function (e) {
+                                e.stopPropagation();
+                                setMode('edit');
+                            }
+                        },
+                        el('span', { className: 'dashicons dashicons-edit' }),
+                        ' Bewerk ACF Velden'
+                    ),
+                    el(
+                        'button',
+                        {
+                            type: 'button',
+                            className: 'acf-preview-collapse-overlay-btn',
+                            onClick: function (e) {
+                                e.stopPropagation();
+                                setIsCollapsed(true);
+                            }
+                        },
+                        el('span', { className: 'dashicons dashicons-arrow-up-alt2' }),
+                        ' Inklappen'
+                    )
                 )
             );
 
@@ -167,7 +235,7 @@
                 Fragment,
                 null,
                 editToggleToolbar,
-                el('div', blockProps, mode === 'edit' ? acfFormView : previewView)
+                el('div', blockProps, isCollapsed ? collapsedView : (mode === 'edit' ? acfFormView : previewView))
             );
         },
         save: function () {

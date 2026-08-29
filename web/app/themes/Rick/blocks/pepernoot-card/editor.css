@@ -1,20 +1,99 @@
+.acf-block-fields-container,
+.acf-block-fields-container * {
+    box-sizing: border-box !important;
+}
+
+.rick-block-wrapper {
+    max-width: 840px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.wp-block[data-type="rick/pepernoot-card"],
+.wp-block-rick-pepernoot-card {
+    max-width: 840px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+}
+
 .acf-block-fields-container {
     background: #ffffff !important;
     color: #1d2327 !important;
     border: 1px solid #c3c4c7 !important;
     border-radius: 8px !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
-    margin: 15px 0 !important;
+    margin: 15px auto !important;
+    max-width: 840px !important;
     overflow: hidden !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
     text-align: left !important;
     width: 100% !important;
     display: block !important;
 }
 
+/* Inklapbalk */
+.acf-block-collapsed-bar {
+    background: #ffffff !important;
+    border: 1px solid #c3c4c7 !important;
+    border-left: 4px solid #d97706 !important;
+    border-radius: 8px !important;
+    padding: 12px 18px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    margin: 12px auto !important;
+    max-width: 840px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.15s ease !important;
+}
+
+.acf-block-collapsed-bar:hover {
+    background: #fffdf8 !important;
+    border-color: #d97706 !important;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15) !important;
+}
+
+.acf-block-collapsed-title {
+    font-size: 13px !important;
+    color: #646970 !important;
+    font-weight: 500 !important;
+    margin-left: 6px !important;
+    max-width: 320px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    display: inline-block !important;
+}
+
+.acf-btn-collapse {
+    background: #f6f7f7 !important;
+    border: 1px solid #c3c4c7 !important;
+    color: #3c434a !important;
+    border-radius: 5px !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    transition: all 0.15s ease !important;
+}
+
+.acf-btn-collapse:hover {
+    background: #2271b1 !important;
+    color: #ffffff !important;
+    border-color: #2271b1 !important;
+}
+
 .acf-block-header {
     background: #f6f7f7 !important;
     border-bottom: 1px solid #dcdcde !important;
-    padding: 14px 18px !important;
+    padding: 12px 18px !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -32,6 +111,8 @@
 .acf-block-header__icon {
     color: #d97706 !important;
     font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
 }
 
 .acf-block-header__tag {
@@ -40,9 +121,15 @@
     border: 1px solid #fde68a !important;
     font-size: 11px !important;
     font-weight: 700 !important;
-    padding: 3px 8px !important;
+    padding: 2px 7px !important;
     border-radius: 4px !important;
     text-transform: uppercase !important;
+}
+
+.acf-block-header__actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
 }
 
 .acf-btn-preview {
@@ -57,6 +144,7 @@
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
+    transition: all 0.15s ease !important;
 }
 
 .acf-btn-preview:hover {
@@ -130,6 +218,9 @@
     border-radius: 4px !important;
     padding: 8px 12px !important;
     font-size: 14px !important;
+    line-height: 1.5 !important;
+    display: block !important;
+    box-sizing: border-box !important;
 }
 
 .acf-input textarea {
@@ -142,13 +233,20 @@
     border-radius: 8px !important;
     padding: 6px !important;
     overflow: hidden !important;
-    margin: 15px 0 !important;
+    margin: 15px auto !important;
+    max-width: 840px !important;
+}
+
+.acf-preview-actions-overlay {
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    display: flex !important;
+    gap: 8px !important;
+    z-index: 20 !important;
 }
 
 .acf-preview-edit-overlay-btn {
-    position: absolute !important;
-    top: 20px !important;
-    right: 20px !important;
     background: rgba(17, 24, 39, 0.9) !important;
     backdrop-filter: blur(6px) !important;
     color: #ffffff !important;
@@ -158,20 +256,40 @@
     font-size: 13px !important;
     font-weight: 600 !important;
     cursor: pointer !important;
-    z-index: 20 !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
 }
 
 .acf-preview-edit-overlay-btn:hover {
     background: #d97706 !important;
 }
 
-/* Pepernoot card preview */
+.acf-preview-collapse-overlay-btn {
+    background: rgba(17, 24, 39, 0.85) !important;
+    backdrop-filter: blur(6px) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 6px !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+}
+
+.acf-preview-collapse-overlay-btn:hover {
+    background: #374151 !important;
+}
+
 .rick-pepernoot-review-card {
     background: #ffffff;
     border: 1px solid #e5e7eb;
-    border-radius: 16px;
-    padding: 28px;
+    border-radius: 12px;
+    padding: 24px;
 }
 
 .rick-pepernoot-review-header {
@@ -179,8 +297,8 @@
     justify-content: space-between;
     align-items: flex-start;
     border-bottom: 2px solid #fef3c7;
-    padding-bottom: 18px;
-    margin-bottom: 20px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
 }
 
 .rick-pepernoot-review-badges {
@@ -212,7 +330,7 @@
 }
 
 .rick-pepernoot-review-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: #92400e;
     margin: 0 0 4px 0;
@@ -227,8 +345,8 @@
 .rick-pepernoot-score-circle {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     color: #ffffff;
-    width: 70px;
-    height: 70px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
@@ -238,7 +356,7 @@
 }
 
 .rick-pepernoot-score-number {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 800;
     line-height: 1;
 }
@@ -249,15 +367,15 @@
 
 .rick-pepernoot-review-body {
     display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+    grid-template-columns: 180px 1fr;
+    gap: 18px;
+    margin-bottom: 16px;
 }
 
 .rick-pepernoot-review-media {
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
-    height: 160px;
+    height: 140px;
 }
 
 .rick-pepernoot-review-media img {
@@ -270,13 +388,13 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .rick-highlight-pill {
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
 }
 
 .rick-highlight-pill--pro {
@@ -292,62 +410,52 @@
 .rick-pepernoot-pros-cons-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 16px;
+    gap: 12px;
+    margin-bottom: 14px;
 }
 
 .rick-pros-box {
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
-    padding: 14px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 8px;
 }
 
 .rick-cons-box {
     background: #fef2f2;
     border: 1px solid #fecaca;
-    padding: 14px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 8px;
 }
 
 .rick-pros-box__title {
     color: #166534;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
 }
 
 .rick-cons-box__title {
     color: #991b1b;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
 }
 
 .rick-pros-list,
 .rick-cons-list {
     list-style: disc;
-    padding-left: 18px;
+    padding-left: 16px;
     margin: 0;
-    font-size: 0.85rem;
-}
-
-.rick-pros-list li {
-    color: #166534;
-    margin-bottom: 4px;
-}
-
-.rick-cons-list li {
-    color: #991b1b;
-    margin-bottom: 4px;
+    font-size: 0.82rem;
 }
 
 .rick-pepernoot-card-button {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     color: #ffffff !important;
-    padding: 10px 20px;
+    padding: 8px 18px;
     border-radius: 6px;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     display: inline-block;
 }
