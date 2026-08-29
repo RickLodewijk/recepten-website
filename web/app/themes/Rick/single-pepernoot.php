@@ -39,25 +39,35 @@ if ( have_posts() ) :
             <?php endif; ?>
 
             <?php if ( $pluspunten ) : ?>
-                <h2>Pluspunten</h2>
-                <div class="pepernoot-notes pepernoot-notes--plus">
-                    <?php foreach ( preg_split( '/\r\n|\r|\n/', trim( $pluspunten ) ) as $line ) : ?>
-                        <?php if ( trim( $line ) !== '' ) : ?>
-                            <p><?php echo esc_html( trim( $line ) ); ?></p>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
+                <details class="pepernoot-notes pepernoot-notes--plus pepernoot-collapsible" open>
+                    <summary class="pepernoot-collapsible-summary">
+                        <h2><span>✓</span> Pluspunten</h2>
+                        <span class="pepernoot-collapsible-arrow"></span>
+                    </summary>
+                    <div class="pepernoot-collapsible-content">
+                        <?php foreach ( preg_split( '/\r\n|\r|\n/', trim( $pluspunten ) ) as $line ) : ?>
+                            <?php if ( trim( $line ) !== '' ) : ?>
+                                <p><?php echo esc_html( trim( $line ) ); ?></p>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </details>
             <?php endif; ?>
 
             <?php if ( $minpunten ) : ?>
-                <h2>Minpunten</h2>
-                <div class="pepernoot-notes pepernoot-notes--min">
-                    <?php foreach ( preg_split( '/\r\n|\r|\n/', trim( $minpunten ) ) as $line ) : ?>
-                        <?php if ( trim( $line ) !== '' ) : ?>
-                            <p><?php echo esc_html( trim( $line ) ); ?></p>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </div>
+                <details class="pepernoot-notes pepernoot-notes--min pepernoot-collapsible" open>
+                    <summary class="pepernoot-collapsible-summary">
+                        <h2><span>✕</span> Minpunten</h2>
+                        <span class="pepernoot-collapsible-arrow"></span>
+                    </summary>
+                    <div class="pepernoot-collapsible-content">
+                        <?php foreach ( preg_split( '/\r\n|\r|\n/', trim( $minpunten ) ) as $line ) : ?>
+                            <?php if ( trim( $line ) !== '' ) : ?>
+                                <p><?php echo esc_html( trim( $line ) ); ?></p>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </details>
             <?php endif; ?>
         </article>
         <?php

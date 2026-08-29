@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rick/pepernoot-form",
+  "version": "1.0.0",
+  "title": "Pepernoot Inzendformulier",
+  "category": "rick-blocks",
+  "icon": "feedback",
+  "description": "Een interactief frontend formulier om direct nieuwe pepernoten met score, plus/minpunten en review toe te voegen aan de website.",
+  "keywords": ["pepernoot", "formulier", "toevoegen", "form", "inzenden", "review", "score"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Nieuwe Pepernoot Toevoegen"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "Vul onderstaand formulier in om direct een nieuwe pepernoot review en beoordeling te publiceren."
+    },
+    "badge": {
+      "type": "string",
+      "default": "🍪 Pepernoten Test & Review"
+    },
+    "buttonText": {
+      "type": "string",
+      "default": "🍪 Pepernoot Opslaan & Publiceren"
+    },
+    "postStatus": {
+      "type": "string",
+      "default": "publish"
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

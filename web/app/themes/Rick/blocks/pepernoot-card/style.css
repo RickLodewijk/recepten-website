@@ -1,0 +1,401 @@
+.rick-pepernoot-review-section {
+    padding: 35px 0;
+    width: 100%;
+}
+
+.rick-pepernoot-review-section .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.rick-pepernoot-review-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 36px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+/* Header */
+.rick-pepernoot-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: 2px solid #fef3c7;
+    padding-bottom: 22px;
+    margin-bottom: 26px;
+}
+
+.rick-pepernoot-review-header__left {
+    flex: 1;
+}
+
+.rick-pepernoot-review-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.rick-review-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.rick-review-badge--brand {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.rick-review-badge--shop {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.rick-review-badge--price {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.rick-pepernoot-review-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #92400e;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
+}
+
+.rick-pepernoot-review-subtitle {
+    font-size: 1.05rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Score Circle Badge */
+.rick-pepernoot-score-circle {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+    flex-shrink: 0;
+}
+
+.rick-pepernoot-score-star {
+    font-size: 1.1rem;
+    color: #fef3c7;
+    line-height: 1;
+}
+
+.rick-pepernoot-score-number {
+    font-size: 1.65rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.rick-pepernoot-score-max {
+    font-size: 0.72rem;
+    opacity: 0.85;
+    font-weight: 600;
+}
+
+/* Body */
+.rick-pepernoot-review-body {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 30px;
+    margin-bottom: 28px;
+    align-items: start;
+}
+
+.rick-pepernoot-review-media {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 240px;
+    border: 1px solid #e5e7eb;
+    background-color: #fffbeb;
+}
+
+.rick-pepernoot-review-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.rick-pepernoot-review-media:hover img {
+    transform: scale(1.03);
+}
+
+.rick-pepernoot-review-intro p {
+    font-size: 1.02rem;
+    color: #374151;
+    line-height: 1.65;
+    margin: 0 0 16px 0;
+}
+
+/* Highlights */
+.rick-pepernoot-highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.rick-highlight-pill {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rick-highlight-pill--pro {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.rick-highlight-pill--con {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+/* Pros & Cons Grid */
+.rick-pepernoot-pros-cons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.rick-pros-box,
+.rick-cons-box {
+    padding: 20px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.rick-pros-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+}
+
+.rick-cons-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+/* Collapsible / Accordion Header */
+.rick-collapsible-summary {
+    list-style: none !important;
+    cursor: default;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+.rick-collapsible-summary::-webkit-details-marker {
+    display: none !important;
+}
+
+.rick-collapsible-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rick-pros-box__title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #166534;
+}
+
+.rick-cons-box__title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #991b1b;
+}
+
+.rick-collapsible-chevron {
+    display: none;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+    margin-right: 4px;
+}
+
+details.rick-collapsible[open] .rick-collapsible-chevron {
+    transform: rotate(-135deg);
+}
+
+.rick-collapsible-body {
+    margin-top: 14px;
+}
+
+.rick-pros-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #16a34a;
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.rick-cons-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #dc2626;
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.rick-pros-list,
+.rick-cons-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.rick-pros-list li {
+    position: relative;
+    padding-left: 18px;
+    color: #166534;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.rick-pros-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #16a34a;
+    font-weight: bold;
+}
+
+.rick-cons-list li {
+    position: relative;
+    padding-left: 18px;
+    color: #991b1b;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.rick-cons-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #dc2626;
+    font-weight: bold;
+}
+
+/* Footer Button */
+.rick-pepernoot-card-footer {
+    margin-top: 24px;
+    text-align: right;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 20px;
+}
+
+.rick-pepernoot-card-button {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #ffffff !important;
+    padding: 12px 28px !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    transition: all 0.2s ease !important;
+}
+
+.rick-pepernoot-card-button:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(217, 119, 6, 0.4) !important;
+}
+
+@media (max-width: 768px) {
+    .rick-pepernoot-review-card {
+        padding: 22px;
+    }
+
+    .rick-pepernoot-review-header {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
+
+    .rick-pepernoot-score-circle {
+        align-self: flex-start;
+    }
+
+    .rick-pepernoot-review-body {
+        grid-template-columns: 1fr;
+    }
+
+    .rick-pepernoot-pros-cons-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    /* Mobiel: Inklapbare Plus- en Minpunten Accordion */
+    .rick-collapsible-summary {
+        cursor: pointer !important;
+        padding: 4px 0;
+    }
+
+    .rick-collapsible-chevron {
+        display: inline-block !important;
+    }
+
+    .rick-pros-box,
+    .rick-cons-box {
+        padding: 16px 18px;
+    }
+
+    .rick-pepernoot-card-footer {
+        text-align: center;
+    }
+
+    .rick-pepernoot-card-button {
+        width: 100%;
+        justify-content: center;
+    }
+}

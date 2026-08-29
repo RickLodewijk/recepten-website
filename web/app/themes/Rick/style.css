@@ -86,14 +86,65 @@ main { padding: 0; margin: 0; width: 100%; }
 	margin-bottom: 1rem;
 	background: #fff;
 	border: 1px solid #e5e7eb;
+	transition: all 0.2s ease;
+}
+
+.pepernoot-collapsible-summary {
+	list-style: none !important;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: default;
+	user-select: none;
+}
+
+.pepernoot-collapsible-summary::-webkit-details-marker {
+	display: none !important;
+}
+
+.pepernoot-collapsible-summary h2 {
+	margin: 0;
+	font-size: 1.2rem;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.pepernoot-collapsible-arrow {
+	display: none;
+	width: 9px;
+	height: 9px;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: rotate(45deg);
+	transition: transform 0.25s ease;
+	margin-right: 4px;
+}
+
+details.pepernoot-collapsible[open] .pepernoot-collapsible-arrow {
+	transform: rotate(-135deg);
+}
+
+.pepernoot-collapsible-content {
+	margin-top: 0.85rem;
 }
 
 .pepernoot-notes--plus {
 	border-left: 4px solid #16a34a;
 }
 
+.pepernoot-notes--plus .pepernoot-collapsible-summary h2,
+.pepernoot-notes--plus .pepernoot-collapsible-arrow {
+	color: #166534;
+}
+
 .pepernoot-notes--min {
 	border-left: 4px solid #dc2626;
+}
+
+.pepernoot-notes--min .pepernoot-collapsible-summary h2,
+.pepernoot-notes--min .pepernoot-collapsible-arrow {
+	color: #991b1b;
 }
 
 .pepernoot-notes p {
@@ -102,6 +153,16 @@ main { padding: 0; margin: 0; width: 100%; }
 
 .pepernoot-notes p:last-child {
 	margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+	.pepernoot-collapsible-summary {
+		cursor: pointer !important;
+		padding: 2px 0;
+	}
+	.pepernoot-collapsible-arrow {
+		display: inline-block !important;
+	}
 }
 
 .menu-toggle {

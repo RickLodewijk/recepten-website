@@ -1,0 +1,255 @@
+.rick-pepernoot-form-section {
+    padding: 40px 0;
+    width: 100%;
+}
+
+.rick-pepernoot-form-section .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.rick-pepernoot-card {
+    background: #ffffff;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
+
+.rick-pepernoot-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #fef3c7;
+    padding-bottom: 22px;
+}
+
+.rick-pepernoot-badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.rick-pepernoot-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #92400e;
+    margin: 0 0 8px 0;
+}
+
+.rick-pepernoot-subtitle {
+    color: #6b7280;
+    font-size: 1.02rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.rick-form-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1f2937;
+    background: #fffbeb;
+    border-left: 4px solid #d97706;
+    padding: 10px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rick-form-heading__icon {
+    font-size: 1.2rem;
+}
+
+/* Collapsible Form Section */
+.rick-form-collapsible-section {
+    margin-bottom: 18px;
+}
+
+.rick-form-heading--collapsible {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none !important;
+    transition: background-color 0.15s ease;
+}
+
+.rick-form-heading--collapsible::-webkit-details-marker {
+    display: none !important;
+}
+
+.rick-form-heading--collapsible:hover {
+    background-color: #fef3c7;
+}
+
+.rick-form-heading__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rick-form-heading__optional {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #92400e;
+    opacity: 0.8;
+}
+
+.rick-form-heading__chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #92400e;
+    border-bottom: 2px solid #92400e;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+    margin-right: 4px;
+}
+
+details.rick-form-collapsible-section[open] .rick-form-heading__chevron {
+    transform: rotate(-135deg);
+}
+
+.rick-form-collapsible-body {
+    margin-top: 14px;
+}
+
+.rick-form-grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.rick-form-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.rick-form-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.rick-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.rick-form-group label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #374151;
+}
+
+.rick-form-group label .required {
+    color: #dc2626;
+}
+
+.rick-form-group input,
+.rick-form-group textarea,
+.rick-form-group select {
+    width: 100%;
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 11px 14px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.rick-form-group input:focus,
+.rick-form-group textarea:focus,
+.rick-form-group select:focus {
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18);
+    outline: none;
+}
+
+.rick-form-submit-wrapper {
+    margin-top: 32px;
+    text-align: right;
+}
+
+.rick-pepernoot-submit-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    padding: 15px 36px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.4) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    transition: all 0.2s ease !important;
+}
+
+.rick-pepernoot-submit-btn:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(217, 119, 6, 0.5) !important;
+}
+
+.rick-pepernoot-submit-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+
+.rick-pepernoot-submit-btn:hover .rick-pepernoot-submit-arrow {
+    transform: translateX(4px);
+}
+
+.rick-form-alert {
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.rick-form-alert--success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.rick-form-alert--error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+
+@media (max-width: 768px) {
+    .rick-pepernoot-card {
+        padding: 24px;
+    }
+
+    .rick-form-grid--2,
+    .rick-form-grid--4 {
+        grid-template-columns: 1fr;
+    }
+
+    .rick-form-submit-wrapper {
+        text-align: center;
+    }
+
+    .rick-pepernoot-submit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
