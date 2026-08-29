@@ -133,7 +133,7 @@ $query = new WP_Query($args);
 
             <!-- Paginering -->
             <?php if ($query->max_num_pages > 1) : ?>
-                <div style="margin-top: 40px; text-align: center;">
+                <nav class="rick-pagination" aria-label="Recepten paginering">
                     <?php
                     echo paginate_links(array(
                         'base'      => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
@@ -142,9 +142,10 @@ $query = new WP_Query($args);
                         'total'     => $query->max_num_pages,
                         'prev_text' => '← Vorige',
                         'next_text' => 'Volgende →',
+                        'type'      => 'plain',
                     ));
                     ?>
-                </div>
+                </nav>
             <?php endif; ?>
 
         <?php else : ?>
