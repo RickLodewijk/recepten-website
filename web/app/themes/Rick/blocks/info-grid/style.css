@@ -1,0 +1,103 @@
+.rick-info-grid-section {
+    padding: 30px 0;
+    width: 100%;
+}
+
+.rick-info-grid-section .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.rick-info-grid-block {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 36px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.rick-info-grid-title {
+    font-size: 1.85rem;
+    color: #92400e;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+}
+
+.rick-info-grid-subtitle {
+    color: #6b7280;
+    font-size: 1.05rem;
+    margin: 0 0 28px 0;
+    line-height: 1.6;
+}
+
+.rick-info-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.rick-info-card {
+    background: #fffdf8;
+    border: 1px solid #fef3c7;
+    padding: 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.rick-info-card:hover {
+    transform: translateY(-4px);
+    border-color: #d97706;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px -4px rgba(217, 119, 6, 0.15);
+}
+
+.rick-info-card__content {
+    flex: 1;
+}
+
+.rick-info-card__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 8px 0;
+    transition: color 0.15s ease;
+}
+
+.rick-info-card:hover .rick-info-card__title {
+    color: #d97706;
+}
+
+.rick-info-card__desc {
+    font-size: 0.92rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.rick-info-card__arrow {
+    color: #d97706;
+    font-size: 1.25rem;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.rick-info-card:hover .rick-info-card__arrow {
+    transform: translateX(4px);
+}
+
+@media (max-width: 640px) {
+    .rick-info-grid-block {
+        padding: 24px;
+    }
+
+    .rick-info-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}

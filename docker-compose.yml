@@ -11,6 +11,7 @@ services:
       - ./config:/var/www/html/config
       - ./.env:/var/www/html/.env
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini  # <- Hier hoort hij thuis!
+      - ./web/.htaccess:/var/www/html/web/.htaccess
     depends_on:
       - db
 

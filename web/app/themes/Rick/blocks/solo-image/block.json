@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rick/solo-image",
+  "version": "1.0.0",
+  "title": "Afbeeldingsbanner / Solo",
+  "category": "rick-blocks",
+  "icon": "format-image",
+  "description": "Een grote uitgelichte afbeelding of banner met optionele titel overlay in huisstijl.",
+  "keywords": ["image", "banner", "solo", "foto", "afbeelding", "cover", "overlay"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "imageUrl": {
+      "type": "string",
+      "default": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=80"
+    },
+    "imageAlt": {
+      "type": "string",
+      "default": "Grote sfeerafbeelding"
+    },
+    "overlayTitle": {
+      "type": "string",
+      "default": "Puur Kook- en Bakplezier"
+    },
+    "height": {
+      "type": "string",
+      "default": "350px"
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

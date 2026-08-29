@@ -1,0 +1,65 @@
+.rick-solo-image-section {
+    padding: 25px 0;
+    width: 100%;
+}
+
+.rick-solo-image-section .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.rick-solo-image-block {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    height: 350px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    background-color: #fffbeb;
+}
+
+.rick-solo-image-block img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.rick-solo-image-block:hover img {
+    transform: scale(1.02);
+}
+
+.rick-solo-image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px;
+    background: linear-gradient(transparent, rgba(17, 24, 39, 0.85));
+    display: flex;
+    align-items: flex-end;
+}
+
+.rick-solo-image-overlay h2 {
+    color: #ffffff;
+    font-size: 1.85rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 640px) {
+    .rick-solo-image-block {
+        height: 250px !important;
+    }
+
+    .rick-solo-image-overlay {
+        padding: 20px;
+    }
+
+    .rick-solo-image-overlay h2 {
+        font-size: 1.35rem;
+    }
+}

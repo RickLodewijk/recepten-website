@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rick/info-grid",
+  "version": "1.0.0",
+  "title": "Informatie Kaarten Grid",
+  "category": "rick-blocks",
+  "icon": "grid-view",
+  "description": "Titel, introtekst en een flexibel grid van klikbare informatie- of categoriekaarten in huisstijl.",
+  "keywords": ["grid", "kaarten", "cards", "info", "informatie", "categorie", "links"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Informatie & Categorieën"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "Een overzichtelijk overzicht met directe verwijzingen naar belangrijke recepten en tips."
+    },
+    "cards": {
+      "type": "array",
+      "default": [
+        {
+          "title": "Baktips & Technieken",
+          "description": "Handige baktips en instructies voor het beste resultaat.",
+          "url": "/baktips/"
+        },
+        {
+          "title": "Recepten Overzicht",
+          "description": "Ontdek al onze snelle, gezonde en smaakvolle gerechten.",
+          "url": "/recepten/"
+        },
+        {
+          "title": "Pepernoten Special",
+          "description": "De lekkerste zelfgemaakte kruidnoten en variaties.",
+          "url": "/pepernoten/"
+        }
+      ]
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

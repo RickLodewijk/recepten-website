@@ -1,0 +1,123 @@
+.rick-gallery-slider-section {
+    padding: 30px 0;
+    width: 100%;
+}
+
+.rick-gallery-slider-section .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.rick-slider-title {
+    font-size: 1.85rem;
+    color: #92400e;
+    margin: 0 0 20px 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rick-slider-icon {
+    font-size: 1.5rem;
+}
+
+.rick-slider-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 18px;
+    padding-top: 4px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar in huisstijl (amber) */
+.rick-slider-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.rick-slider-container::-webkit-scrollbar-track {
+    background: #fef3c7;
+    border-radius: 10px;
+}
+
+.rick-slider-container::-webkit-scrollbar-thumb {
+    background: #d97706;
+    border-radius: 10px;
+}
+
+.rick-slider-container::-webkit-scrollbar-thumb:hover {
+    background: #b45309;
+}
+
+.rick-slider-item {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border: 1px solid #e5e7eb;
+    text-decoration: none;
+    display: block;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fffbeb;
+}
+
+.rick-slider-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: #d97706;
+    box-shadow: 0 10px 20px -3px rgba(217, 119, 6, 0.2);
+}
+
+.rick-slider-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.rick-slider-item:hover img {
+    transform: scale(1.05);
+}
+
+.rick-slider-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    background: rgba(17, 24, 39, 0.88);
+    backdrop-filter: blur(6px);
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: background 0.2s ease;
+}
+
+.rick-slider-item:hover .rick-slider-badge {
+    background: rgba(217, 119, 6, 0.95);
+}
+
+.rick-slider-badge-icon {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .rick-slider-item {
+        flex: 0 0 230px;
+    }
+
+    .rick-slider-title {
+        font-size: 1.45rem;
+    }
+}

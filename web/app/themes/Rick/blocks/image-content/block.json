@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rick/image-content",
+  "version": "1.0.0",
+  "title": "Afbeelding & Tekst (Split)",
+  "category": "rick-blocks",
+  "icon": "align-pull-left",
+  "description": "Sectie met een afbeelding aan de ene kant en titel, tekst en actieknop aan de andere kant in huisstijl.",
+  "keywords": ["image", "content", "split", "tekst", "afbeelding", "hero", "recept"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "imageUrl": {
+      "type": "string",
+      "default": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80"
+    },
+    "imageAlt": {
+      "type": "string",
+      "default": "Uitgelicht recept"
+    },
+    "imagePosition": {
+      "type": "string",
+      "default": "left"
+    },
+    "title": {
+      "type": "string",
+      "default": "Uitgelicht Recept"
+    },
+    "content": {
+      "type": "string",
+      "default": "Dit is een image-content sectie waarin beeld en verhaal direct samenkomen. Ideaal om een belangrijk artikel, nieuw gerecht of categorie uit te lichten."
+    },
+    "buttonText": {
+      "type": "string",
+      "default": "Bekijk Recept"
+    },
+    "buttonUrl": {
+      "type": "string",
+      "default": "#"
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

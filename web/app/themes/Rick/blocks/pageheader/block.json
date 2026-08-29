@@ -1,0 +1,79 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rick/pageheader",
+  "version": "1.1.0",
+  "title": "Page Header",
+  "category": "rick-blocks",
+  "icon": "heading",
+  "description": "Een luxe en sfeervolle pagina header met achtergrondafbeelding, gradient overlay, titel, subtitel, badge en knop in huisstijl.",
+  "keywords": ["pageheader", "header", "hero", "titel", "banner", "achtergrond", "foto"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
+    "title": {
+      "type": "string",
+      "default": "Ontdek Heerlijke Recepten"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "Fresh, simpel en lekker koken met de beste ingrediënten en baktips."
+    },
+    "badge": {
+      "type": "string",
+      "default": "Rick Recepten"
+    },
+    "buttons": {
+      "type": "array",
+      "default": [
+        {
+          "text": "Bekijk Recepten",
+          "url": "/recepten/",
+          "style": "primary"
+        }
+      ]
+    },
+    "buttonText": {
+      "type": "string",
+      "default": ""
+    },
+    "buttonUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "textAlign": {
+      "type": "string",
+      "default": "center"
+    },
+    "bgImageUrl": {
+      "type": "string",
+      "default": "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1600&q=80"
+    },
+    "overlayType": {
+      "type": "string",
+      "default": "warm-dark"
+    },
+    "minHeight": {
+      "type": "string",
+      "default": "medium"
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

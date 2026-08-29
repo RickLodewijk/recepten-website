@@ -1,0 +1,289 @@
+.rick-pageheader,
+.wp-block-rick-pageheader {
+    position: relative;
+    width: 100vw;
+    max-width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: 0;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: #fffbeb;
+    background-image: var(--rick-header-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-bottom: 2px solid #fef3c7;
+    transition: min-height 0.3s ease;
+}
+
+/* Hoogte varianten */
+.rick-pageheader.is-height-large {
+    min-height: 460px;
+    padding: 90px 20px;
+}
+
+.rick-pageheader.is-height-medium {
+    min-height: 360px;
+    padding: 70px 20px;
+}
+
+.rick-pageheader.is-height-compact {
+    min-height: 260px;
+    padding: 45px 20px;
+}
+
+/* Container & Uitlijning */
+.rick-pageheader__container {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.rick-pageheader.is-align-center .rick-pageheader__container {
+    text-align: center;
+}
+
+.rick-pageheader.is-align-left .rick-pageheader__container {
+    text-align: left;
+}
+
+.rick-pageheader.is-align-right .rick-pageheader__container {
+    text-align: right;
+}
+
+/* Overlays bij achtergrondafbeelding */
+.rick-pageheader__overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.rick-pageheader.has-bg-image .rick-pageheader__overlay {
+    display: block;
+}
+
+.rick-pageheader.overlay-warm-dark .rick-pageheader__overlay {
+    background: linear-gradient(135deg, rgba(35, 18, 5, 0.76) 0%, rgba(15, 23, 42, 0.8) 100%);
+}
+
+.rick-pageheader.overlay-dark .rick-pageheader__overlay {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.6) 0%, rgba(17, 24, 39, 0.85) 100%);
+}
+
+.rick-pageheader.overlay-amber .rick-pageheader__overlay {
+    background: linear-gradient(135deg, rgba(146, 64, 14, 0.85) 0%, rgba(180, 83, 9, 0.8) 100%);
+}
+
+/* Badge / Label */
+.rick-pageheader__badge-wrapper {
+    margin-bottom: 16px;
+}
+
+.rick-pageheader__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.75px;
+    transition: transform 0.2s ease;
+}
+
+/* Badge styling zónder achtergrondafbeelding */
+.rick-pageheader.no-bg-image .rick-pageheader__badge {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+/* Badge styling mét achtergrondafbeelding (Glassmorphism) */
+.rick-pageheader.has-bg-image .rick-pageheader__badge {
+    background: rgba(254, 243, 199, 0.92);
+    color: #92400e;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Titel */
+.rick-pageheader__title {
+    font-size: 3rem;
+    line-height: 1.15;
+    font-weight: 800;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.5px;
+}
+
+.rick-pageheader.no-bg-image .rick-pageheader__title {
+    color: #92400e;
+}
+
+.rick-pageheader.has-bg-image .rick-pageheader__title {
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+/* Subtitel */
+.rick-pageheader__subtitle {
+    font-size: 1.2rem;
+    line-height: 1.65;
+    max-width: 780px;
+    margin: 0 auto 28px auto;
+}
+
+.rick-pageheader.is-align-left .rick-pageheader__subtitle {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.rick-pageheader.is-align-right .rick-pageheader__subtitle {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.rick-pageheader.no-bg-image .rick-pageheader__subtitle {
+    color: #4b5563;
+}
+
+.rick-pageheader.has-bg-image .rick-pageheader__subtitle {
+    color: #fef3c7;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Actieknoppen (Flex container voor meerdere knoppen) */
+.rick-pageheader__actions {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+}
+
+.rick-pageheader.is-align-center .rick-pageheader__actions {
+    justify-content: center;
+}
+
+.rick-pageheader.is-align-left .rick-pageheader__actions {
+    justify-content: flex-start;
+}
+
+.rick-pageheader.is-align-right .rick-pageheader__actions {
+    justify-content: flex-end;
+}
+
+.rick-pageheader__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 30px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.02rem;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.rick-pageheader__button-arrow {
+    font-size: 1.15rem;
+    transition: transform 0.2s ease;
+}
+
+/* 1. Primair (Gevuld Amber) */
+.rick-pageheader__button--primary {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff !important;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.4);
+}
+
+.rick-pageheader__button--primary:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.5);
+    color: #ffffff !important;
+}
+
+/* 2. Secundair (Glazen Omlijnd) */
+.rick-pageheader__button--secondary,
+.rick-pageheader__button--outline {
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    color: #ffffff !important;
+}
+
+.rick-pageheader__button--secondary:hover,
+.rick-pageheader__button--outline:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    color: #111827 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* 3. Wit */
+.rick-pageheader__button--white {
+    background: #ffffff;
+    border: 2px solid #ffffff;
+    color: #111827 !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.rick-pageheader__button--white:hover {
+    background: #fef3c7;
+    border-color: #fef3c7;
+    color: #92400e !important;
+    transform: translateY(-2px);
+}
+
+.rick-pageheader__button:hover .rick-pageheader__button-arrow {
+    transform: translateX(4px);
+}
+
+.rick-pageheader__button:active {
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rick-pageheader.is-height-large {
+        min-height: 360px;
+        padding: 60px 15px;
+    }
+
+    .rick-pageheader.is-height-medium {
+        min-height: 300px;
+        padding: 50px 15px;
+    }
+
+    .rick-pageheader.is-height-compact {
+        min-height: 220px;
+        padding: 35px 15px;
+    }
+
+    .rick-pageheader__title {
+        font-size: 2.1rem;
+    }
+
+    .rick-pageheader__subtitle {
+        font-size: 1.05rem;
+    }
+}

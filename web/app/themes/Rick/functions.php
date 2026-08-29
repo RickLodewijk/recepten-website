@@ -13,12 +13,32 @@ function rick_setup() {
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
     add_theme_support('menus');
-    add_theme_support('html5', array('search-form','comment-form','comment-list','gallery','caption'));
-    register_nav_menus(array(
+    add_theme_support('align-wide');
+    add_theme_support('responsive-embeds');
+    add_theme_support('html5', ['search-form', 'comment-form', 'comment-list', 'gallery', 'caption']);
+    register_nav_menus([
         'primary' => __('Primary Menu', 'rick'),
-    ));
+        'footer' => __('Footer Menu', 'rick'),
+    ]);
 }
-add_action('after_setup_theme','rick_setup');
+add_action('after_setup_theme', 'rick_setup');
+
+/**
+ * Voeg een eigen blokcategorie toe voor het Rick thema.
+ */
+function rick_block_categories($categories) {
+    return array_merge(
+        [
+            [
+                'slug' => 'rick-blocks',
+                'title' => __('Rick Blokken', 'rick'),
+                'icon' => 'food',
+            ],
+        ],
+        $categories
+    );
+}
+add_filter('block_categories_all', 'rick_block_categories', 10, 1);
 
 function rick_primary_menu_fallback() {
     $items = array(
@@ -68,7 +88,7 @@ function rick_enqueue_assets() {
         true
     );
 
-    if (is_front_page()) {
+    if (is_front_page() || is_page_template('template-overview.php')) {
         $home_css_rel = 'assets/css/home.css';
         $home_css_abs = get_theme_file_path($home_css_rel);
 
@@ -120,3 +140,19 @@ add_action('wp_enqueue_scripts','rick_enqueue_assets');
 
 // Sta applicatiewachtwoorden toe op een lokale niet-HTTPS (HTTP) site
 add_filter('wp_is_application_passwords_supported', '__return_true');
+
+/**
+ * Registreer alle custom Gutenberg blokken van het Rick thema.
+ */
+function rick_register_blocks() {
+    $blocks_dir = get_theme_file_path('blocks');
+    if (is_dir($blocks_dir)) {
+        foreach (glob($blocks_dir . '/*', GLOB_ONLYDIR) as $block_path) {
+            if (file_exists($block_path . '/block.json')) {
+                register_block_type($block_path);
+            }
+        }
+    }
+}
+add_action('init', 'rick_register_blocks');
+

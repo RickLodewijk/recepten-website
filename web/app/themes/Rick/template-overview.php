@@ -1,4 +1,9 @@
 <?php
+
+/*
+Template Name: Overview recipes
+Description: Page template that outputs ACF fields (hero + repeater sections)
+*/
 get_header();
 
 $search_query = isset($_GET['s_recept']) ? sanitize_text_field($_GET['s_recept']) : '';

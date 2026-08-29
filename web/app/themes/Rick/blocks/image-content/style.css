@@ -1,0 +1,128 @@
+.rick-image-content-section {
+    padding: 30px 0;
+    width: 100%;
+}
+
+.rick-image-content-section .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.rick-image-content-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 36px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.rick-image-content-block.is-image-right {
+    grid-template-columns: 1fr 1fr;
+}
+
+.rick-image-content-block.is-image-right .rick-image-content-media {
+    order: 2;
+}
+
+.rick-image-content-block.is-image-right .rick-image-content-text {
+    order: 1;
+}
+
+.rick-image-content-media {
+    overflow: hidden;
+    border-radius: 12px;
+    height: 320px;
+    background-color: #fffbeb;
+}
+
+.rick-image-content-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+}
+
+.rick-image-content-block:hover .rick-image-content-media img {
+    transform: scale(1.02);
+}
+
+.rick-image-content-text h2 {
+    font-size: 1.85rem;
+    color: #92400e;
+    margin: 0 0 14px 0;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.rick-image-content-body {
+    color: #4b5563;
+    margin-bottom: 24px;
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+.rick-image-content-body p:last-child {
+    margin-bottom: 0;
+}
+
+.rick-image-content-actions {
+    margin-top: 20px;
+}
+
+.rick-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #d97706;
+    color: #ffffff !important;
+    padding: 12px 26px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.rick-btn-primary:hover {
+    background-color: #b45309;
+    transform: translateY(-2px);
+    color: #ffffff !important;
+}
+
+.rick-btn-primary:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .rick-image-content-block,
+    .rick-image-content-block.is-image-right {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 24px;
+    }
+
+    .rick-image-content-block.is-image-right .rick-image-content-media {
+        order: 1;
+    }
+
+    .rick-image-content-block.is-image-right .rick-image-content-text {
+        order: 2;
+    }
+
+    .rick-image-content-media {
+        height: 240px;
+    }
+
+    .rick-image-content-text h2 {
+        font-size: 1.5rem;
+    }
+}

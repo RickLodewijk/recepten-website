@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rick/gallery-slider",
+  "version": "1.0.0",
+  "title": "Galerij / Recepten Slider",
+  "category": "rick-blocks",
+  "icon": "images-alt2",
+  "description": "Horizontaal scrollbare galerij met klikbare afbeeldingen en badges in huisstijl.",
+  "keywords": ["slider", "carrousel", "galerij", "foto", "recepten", "scroll", "badges"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Uitgelichte Collecties & Categorieën"
+    },
+    "items": {
+      "type": "array",
+      "default": [
+        {
+          "imageUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80",
+          "label": "Ontbijt & Brunch",
+          "url": "/recept-categorie/ontbijt/",
+          "imageAlt": "Ontbijt gerechten"
+        },
+        {
+          "imageUrl": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&q=80",
+          "label": "Baktips & Koekjes",
+          "url": "/baktips/",
+          "imageAlt": "Baktips overzicht"
+        },
+        {
+          "imageUrl": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=600&q=80",
+          "label": "Pepernoten Recepten",
+          "url": "/pepernoten/",
+          "imageAlt": "Pepernoten en kruidnoten"
+        },
+        {
+          "imageUrl": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&q=80",
+          "label": "Snelle Snacks",
+          "url": "/recepten/",
+          "imageAlt": "Snelle hapjes"
+        }
+      ]
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}
