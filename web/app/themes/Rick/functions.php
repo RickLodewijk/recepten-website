@@ -93,7 +93,7 @@ function rick_enqueue_assets() {
         true
     );
 
-    if (is_front_page() || is_page_template('template-overview.php')) {
+    if (is_front_page() || is_page_template('template-overview.php') || is_post_type_archive('recept') || is_tax('recept_categorie')) {
         $home_css_rel = 'assets/css/home.css';
         $home_css_abs = get_theme_file_path($home_css_rel);
 

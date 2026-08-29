@@ -1,12 +1,27 @@
 <?php
 
 add_action('init', 'rick_register_recept_categorie_taxonomy');
+add_action('init', 'rick_register_recept_categorie_meta');
 add_action('recept_categorie_add_form_fields', 'rick_recept_categorie_add_color_field');
 add_action('recept_categorie_edit_form_fields', 'rick_recept_categorie_edit_color_field');
 add_action('created_recept_categorie', 'rick_save_recept_categorie_color_field');
 add_action('edited_recept_categorie', 'rick_save_recept_categorie_color_field');
 add_filter('manage_edit-recept_categorie_columns', 'rick_recept_categorie_columns');
 add_filter('manage_recept_categorie_custom_column', 'rick_recept_categorie_custom_column', 10, 3);
+
+function rick_register_recept_categorie_meta() {
+    register_term_meta('recept_categorie', 'rick_category_color', array(
+        'type'              => 'string',
+        'description'       => 'Kleurcode voor de receptcategorie',
+        'single'            => true,
+        'show_in_rest'      => true,
+        'sanitize_callback' => 'sanitize_hex_color',
+        'default'           => '#d97706',
+        'auth_callback'     => function() {
+            return current_user_can('edit_posts');
+        }
+    ));
+}
 
 function rick_register_recept_categorie_taxonomy() {
     $labels = array(

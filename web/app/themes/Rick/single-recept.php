@@ -27,8 +27,7 @@ if (have_posts()):
                     $terms = get_the_terms(get_the_ID(), 'recept_categorie');
                     if (!empty($terms) && !is_wp_error($terms)):
                         foreach ($terms as $term):
-                            $color = get_term_meta($term->term_id, 'rick_category_color', true);
-                            $color = $color ? $color : '#d97706';
+                            $color = rick_get_term_color($term);
                             ?>
                             <span class="category-pill" style="background-color: <?php echo esc_attr($color); ?>;">
                                 <?php echo esc_html($term->name); ?>
