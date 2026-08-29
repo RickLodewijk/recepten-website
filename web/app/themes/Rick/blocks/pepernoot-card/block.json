@@ -2,12 +2,12 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "rick/pepernoot-card",
-  "version": "1.0.0",
-  "title": "Pepernoot Review Kaart",
+  "version": "1.2.0",
+  "title": "Pepernoot Review Kaart (CPT Koppeling)",
   "category": "rick-blocks",
   "icon": "star-filled",
-  "description": "Een bewerkbaar pepernoot review blok met score, plus- en minpunten, winkel, prijs en foto in huisstijl.",
-  "keywords": ["pepernoot", "review", "kaart", "score", "kruidnoten", "pluspunten", "beoordeling"],
+  "description": "Toont automatisch een complete pepernoot review kaart gekoppeld aan een Pepernoot-bericht uit de database.",
+  "keywords": ["pepernoot", "review", "kaart", "score", "kruidnoten", "cpt", "koppeling"],
   "supports": {
     "html": false,
     "align": ["wide", "full"],
@@ -21,65 +21,13 @@
     }
   },
   "attributes": {
-    "title": {
-      "type": "string",
-      "default": "Van Delft Stroopwafel Pepernoten"
-    },
-    "subtitle": {
-      "type": "string",
-      "default": "Krokante kruidnoten omhuld met echte stroopwafelsmaak en karamel"
-    },
-    "score": {
-      "type": "string",
-      "default": "8.8"
-    },
-    "brand": {
-      "type": "string",
-      "default": "Van Delft"
-    },
-    "shop": {
-      "type": "string",
-      "default": "Albert Heijn"
-    },
-    "price": {
-      "type": "string",
-      "default": "€ 2,49"
-    },
-    "imageUrl": {
-      "type": "string",
-      "default": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80"
-    },
-    "imageAlt": {
-      "type": "string",
-      "default": "Stroopwafel pepernoten"
-    },
-    "pro": {
-      "type": "string",
-      "default": "Echte stroopwafelsmaak en heerlijke bite"
-    },
-    "con": {
-      "type": "string",
-      "default": "Iets aan de zoete kant"
-    },
-    "pluspunten": {
-      "type": "string",
-      "default": "Heerlijke zachte karameltoets\nKnapperige structuur van binnen\nHersluitbare zak"
-    },
-    "minpunten": {
-      "type": "string",
-      "default": "Relatief snel uitverkocht\nPrijziger dan reguliere kruidnoten"
-    },
-    "intro": {
-      "type": "string",
-      "default": "Deze stroopwafel pepernoten van Van Delft zijn een absolute aanrader voor het najaar. De combinatie van kaneel, speculaaskruiden en een zoete laag stroopwafelglazuur smaakt authentiek en niet te kunstmatig."
+    "pepernootId": {
+      "type": "number",
+      "default": 0
     },
     "buttonText": {
       "type": "string",
-      "default": "Bekijk in de winkel"
-    },
-    "buttonUrl": {
-      "type": "string",
-      "default": "#"
+      "default": "Bekijk Volledige Review"
     }
   },
   "editorScript": "file:./editor.js",

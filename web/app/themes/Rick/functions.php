@@ -62,6 +62,11 @@ function rick_primary_menu_fallback() {
             'url' => get_post_type_archive_link('pepernoot'),
             'active' => is_post_type_archive('pepernoot') || is_singular('pepernoot'),
         ),
+        array(
+            'label' => __('🍪 Pepernoot Beoordelen', 'rick'),
+            'url' => home_url('/pepernoot-registreren/'),
+            'active' => is_page('pepernoot-registreren'),
+        ),
     );
 
     echo '<ul class="primary-menu">';

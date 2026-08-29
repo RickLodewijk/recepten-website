@@ -5,36 +5,70 @@
 
     const { registerBlockType } = wp.blocks;
     const { InspectorControls, BlockControls, useBlockProps } = wp.blockEditor || wp.editor || {};
-    const { PanelBody, TextControl, TextareaControl, ToolbarButton, ToolbarGroup } = wp.components || {};
-    const { createElement: el, Fragment, useState } = wp.element;
+    const { PanelBody, SelectControl, TextControl, ToolbarButton, ToolbarGroup } = wp.components || {};
+    const { createElement: el, Fragment, useState, useEffect } = wp.element;
+    const apiFetch = wp.apiFetch;
 
     registerBlockType('rick/pepernoot-card', {
         edit: function (props) {
             const { attributes, setAttributes } = props;
             const {
-                title = 'Van Delft Stroopwafel Pepernoten',
-                subtitle = 'Krokante kruidnoten omhuld met echte stroopwafelsmaak en karamel',
-                score = '8.8',
-                brand = 'Van Delft',
-                shop = 'Albert Heijn',
-                price = '€ 2,49',
-                imageUrl = 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80',
-                imageAlt = '',
-                pro = 'Echte stroopwafelsmaak en heerlijke bite',
-                con = 'Iets aan de zoete kant',
-                pluspunten = 'Heerlijke zachte karameltoets\nKnapperige structuur van binnen\nHersluitbare zak',
-                minpunten = 'Relatief snel uitverkocht\nPrijziger dan reguliere kruidnoten',
-                intro = 'Deze stroopwafel pepernoten van Van Delft zijn een absolute aanrader voor het najaar. De combinatie van kaneel, speculaaskruiden en een zoete laag stroopwafelglazuur smaakt authentiek en niet te kunstmatig.',
-                buttonText = 'Bekijk in de winkel',
-                buttonUrl = '#'
+                pepernootId = 0,
+                buttonText = 'Bekijk Volledige Review'
             } = attributes;
 
-            const [mode, setMode] = useState('edit');
+            const [pepernotenList, setPepernotenList] = useState([]);
+            const [selectedPepernoot, setSelectedPepernoot] = useState(null);
+            const [isLoading, setIsLoading] = useState(true);
             const [isCollapsed, setIsCollapsed] = useState(false);
 
             const blockProps = (typeof useBlockProps === 'function')
                 ? useBlockProps({ className: 'rick-block-wrapper' })
                 : { className: 'rick-block-wrapper' };
+
+            // Haal pepernoten op via de REST API
+            useEffect(function () {
+                setIsLoading(true);
+                apiFetch({ path: '/wp-json/wp/v2/pepernoot?per_page=100&_embed=true' })
+                    .then(function (posts) {
+                        setPepernotenList(posts || []);
+                        setIsLoading(false);
+                    })
+                    .catch(function (err) {
+                        console.error('Fout bij ophalen pepernoten:', err);
+                        setIsLoading(false);
+                    });
+            }, []);
+
+            // Bepaal de getoonde pepernoot
+            useEffect(function () {
+                if (!pepernotenList || pepernotenList.length === 0) {
+                    setSelectedPepernoot(null);
+                    return;
+                }
+
+                if (pepernootId && pepernootId > 0) {
+                    const found = pepernotenList.find(function (p) { return p.id === parseInt(pepernootId, 10); });
+                    setSelectedPepernoot(found || pepernotenList[0]);
+                } else {
+                    // Automatisch meest recente
+                    setSelectedPepernoot(pepernotenList[0]);
+                }
+            }, [pepernootId, pepernotenList]);
+
+            const options = [
+                { label: '🌟 Meest recente pepernoot tonen (Automatisch)', value: 0 }
+            ];
+
+            if (pepernotenList && pepernotenList.length > 0) {
+                pepernotenList.forEach(function (item) {
+                    const titleText = item.title && item.title.rendered ? item.title.rendered.replace(/&#038;/g, '&') : 'Pepernoot #' + item.id;
+                    options.push({
+                        label: '🍪 ' + titleText + ' (ID: ' + item.id + ')',
+                        value: item.id
+                    });
+                });
+            }
 
             const editToggleToolbar = BlockControls && el(
                 BlockControls,
@@ -42,15 +76,6 @@
                 ToolbarGroup && el(
                     ToolbarGroup,
                     null,
-                    ToolbarButton && el(ToolbarButton, {
-                        icon: mode === 'edit' ? 'visibility' : 'edit',
-                        label: mode === 'edit' ? 'Toon Voorbeeld' : 'Bewerk ACF Velden',
-                        isPressed: mode === 'edit',
-                        onClick: function () {
-                            setMode(mode === 'edit' ? 'preview' : 'edit');
-                            if (isCollapsed) setIsCollapsed(false);
-                        },
-                    }),
                     ToolbarButton && el(ToolbarButton, {
                         icon: isCollapsed ? 'arrow-down-alt2' : 'arrow-up-alt2',
                         label: isCollapsed ? 'Klap blok uit' : 'Klap blok in',
@@ -61,8 +86,46 @@
                 )
             );
 
-            const plusItems = pluspunten ? pluspunten.split('\n').filter(Boolean) : [];
-            const minItems = minpunten ? minpunten.split('\n').filter(Boolean) : [];
+            const sidebarControls = InspectorControls && PanelBody && el(
+                InspectorControls,
+                null,
+                el(
+                    PanelBody,
+                    { title: 'Pepernoot Koppeling (CPT)', initialOpen: true },
+                    SelectControl && el(SelectControl, {
+                        label: 'Selecteer Pepernoot Bericht',
+                        value: pepernootId,
+                        options: options,
+                        onChange: function (val) {
+                            setAttributes({ pepernootId: parseInt(val, 10) });
+                        },
+                    }),
+                    TextControl && el(TextControl, {
+                        label: 'Knoptekst',
+                        value: buttonText,
+                        onChange: function (val) { setAttributes({ buttonText: val }); },
+                    })
+                )
+            );
+
+            const postTitle = selectedPepernoot
+                ? (selectedPepernoot.title && selectedPepernoot.title.rendered ? selectedPepernoot.title.rendered.replace(/&#038;/g, '&') : 'Pepernoot #' + selectedPepernoot.id)
+                : 'Van Delft Stroopwafel Pepernoten';
+
+            const acfData = (selectedPepernoot && selectedPepernoot.acf) ? selectedPepernoot.acf : {};
+            const score = acfData.pepernoot_score || '8.8';
+            const subtitle = acfData.pepernoot_subtitle || 'Krokante kruidnoten omhuld met echte stroopwafelsmaak en karamel';
+            const brand = acfData.pepernoot_brand || 'Van Delft';
+            const shop = acfData.pepernoot_shop || 'Albert Heijn';
+            const price = acfData.pepernoot_price || '€ 2,49';
+            const pro = acfData.pepernoot_pro || 'Echte stroopwafelsmaak en heerlijke bite';
+            const con = acfData.pepernoot_con || 'Iets aan de zoete kant';
+            const pluspuntenRaw = acfData.pepernoot_pluspunten || 'Heerlijke zachte karameltoets\nKnapperige structuur van binnen\nHersluitbare zak';
+            const minpuntenRaw = acfData.pepernoot_minpunten || 'Relatief snel uitverkocht\nPrijziger dan reguliere kruidnoten';
+            const plusItems = pluspuntenRaw ? pluspuntenRaw.split('\n').filter(Boolean) : [];
+            const minItems = minpuntenRaw ? minpuntenRaw.split('\n').filter(Boolean) : [];
+            const intro = acfData.pepernoot_intro || (selectedPepernoot && selectedPepernoot.content && selectedPepernoot.content.rendered ? selectedPepernoot.content.rendered.replace(/<[^>]+>/g, '') : 'Heerlijke vers geteste pepernoten.');
+            const imageUrl = acfData.pepernoot_afbeelding || 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80';
 
             // Inklapbalk weergave
             const collapsedView = el(
@@ -74,8 +137,8 @@
                 el('div', { className: 'acf-block-header__title' },
                     el('span', { className: 'dashicons dashicons-star-filled acf-block-header__icon' }),
                     el('strong', null, 'Pepernoot Review Kaart'),
-                    title && el('span', { className: 'acf-block-collapsed-title' }, '— ' + title),
-                    el('span', { className: 'acf-block-header__tag' }, 'Ingeklapt')
+                    el('span', { className: 'acf-block-collapsed-title' }, '— ' + postTitle),
+                    el('span', { className: 'acf-block-header__tag' }, 'CPT Gekoppeld')
                 ),
                 el(
                     'button',
@@ -92,8 +155,8 @@
                 )
             );
 
-            // ACF Form View in de Admin Editor
-            const acfFormView = el(
+            // Hoofdweergave (Selectie balk + Live Kaart)
+            const mainView = el(
                 'div',
                 { className: 'acf-block-fields-container' },
                 el(
@@ -102,20 +165,21 @@
                     el('div', { className: 'acf-block-header__title' },
                         el('span', { className: 'dashicons dashicons-star-filled acf-block-header__icon' }),
                         el('strong', null, 'Pepernoot Review Kaart'),
-                        el('span', { className: 'acf-block-header__tag' }, 'ACF Velden')
+                        el('span', { className: 'acf-block-header__tag' }, 'CPT Gekoppeld')
                     ),
                     el(
                         'div',
                         { className: 'acf-block-header__actions' },
-                        el(
-                            'button',
+                        selectedPepernoot && el(
+                            'a',
                             {
-                                type: 'button',
+                                href: '/wp-admin/post.php?post=' + selectedPepernoot.id + '&action=edit',
+                                target: '_blank',
                                 className: 'acf-btn-preview',
-                                onClick: function () { setMode('preview'); }
+                                style: { textDecoration: 'none' }
                             },
-                            el('span', { className: 'dashicons dashicons-visibility' }),
-                            ' Voorbeeld'
+                            el('span', { className: 'dashicons dashicons-edit' }),
+                            ' Bewerk dit bericht in Admin'
                         ),
                         el(
                             'button',
@@ -129,341 +193,132 @@
                         )
                     )
                 ),
+
+                // Koppelingspaneel (Selector)
                 el(
                     'div',
-                    { className: 'acf-fields-table' },
-
-                    // 1. Basis Info
-                    el('div', { className: 'acf-field acf-field--text acf-field--required' },
-                        el('div', { className: 'acf-label' },
-                            el('label', null, 'Pepernoot Naam / Smaak ', el('span', { className: 'acf-required' }, '*')),
-                            el('p', { className: 'description' }, 'De volledige naam van de geteste pepernoot.')
+                    { style: { padding: '16px 20px', background: '#fffdf8', borderBottom: '1px solid #fef3c7' } },
+                    el('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' } },
+                        el('div', { style: { flex: '1 1 300px' } },
+                            el('label', { style: { display: 'block', fontSize: '13px', fontWeight: '700', color: '#92400e', marginBottom: '4px' } },
+                                'Kies Pepernoot uit de database:'
+                            ),
+                            SelectControl && el(SelectControl, {
+                                value: pepernootId,
+                                options: options,
+                                onChange: function (val) {
+                                    setAttributes({ pepernootId: parseInt(val, 10) });
+                                }
+                            })
                         ),
-                        el('div', { className: 'acf-input' },
+                        el('div', { style: { flex: '1 1 200px' } },
+                            el('label', { style: { display: 'block', fontSize: '13px', fontWeight: '700', color: '#92400e', marginBottom: '4px' } },
+                                'Knoptekst:'
+                            ),
                             TextControl && el(TextControl, {
-                                value: title,
-                                placeholder: 'bijv. Van Delft Stroopwafel Pepernoten',
-                                onChange: function (val) { setAttributes({ title: val }); },
+                                value: buttonText,
+                                onChange: function (val) { setAttributes({ buttonText: val }); }
                             })
                         )
                     ),
-
-                    el('div', { className: 'acf-field acf-field--text' },
-                        el('div', { className: 'acf-label' },
-                            el('label', null, 'Korte Subtitel'),
-                            el('p', { className: 'description' }, 'Korte beschrijving onder de titel.')
-                        ),
-                        el('div', { className: 'acf-input' },
-                            TextControl && el(TextControl, {
-                                value: subtitle,
-                                placeholder: 'bijv. Knapperige kruidnoten met echte stroopwafelsmaak',
-                                onChange: function (val) { setAttributes({ subtitle: val }); },
-                            })
-                        )
-                    ),
-
-                    // 2. Score, Merk, Winkel, Prijs
-                    el('div', { className: 'acf-fields-row' },
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Score (Cijfer 1-10) ⭐'),
-                                el('p', { className: 'description' }, 'Bijv. 8.8')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: score,
-                                    placeholder: '8.8',
-                                    onChange: function (val) { setAttributes({ score: val }); },
-                                })
-                            )
-                        ),
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Merk'),
-                                el('p', { className: 'description' }, 'Bijv. Van Delft')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: brand,
-                                    placeholder: 'Van Delft',
-                                    onChange: function (val) { setAttributes({ brand: val }); },
-                                })
-                            )
-                        ),
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Winkel'),
-                                el('p', { className: 'description' }, 'Bijv. Albert Heijn')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: shop,
-                                    placeholder: 'Albert Heijn',
-                                    onChange: function (val) { setAttributes({ shop: val }); },
-                                })
-                            )
-                        ),
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Prijs'),
-                                el('p', { className: 'description' }, 'Bijv. € 2,49')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: price,
-                                    placeholder: '€ 2,49',
-                                    onChange: function (val) { setAttributes({ price: val }); },
-                                })
-                            )
-                        )
-                    ),
-
-                    // 3. Afbeelding URL
-                    el('div', { className: 'acf-field acf-field--text' },
-                        el('div', { className: 'acf-label' },
-                            el('label', null, 'Afbeelding URL (Foto van de zak / pepernoot)'),
-                            el('p', { className: 'description' }, 'Link naar de productfoto.')
-                        ),
-                        el('div', { className: 'acf-input' },
-                            TextControl && el(TextControl, {
-                                value: imageUrl,
-                                placeholder: 'https://...',
-                                onChange: function (val) { setAttributes({ imageUrl: val }); },
-                            })
-                        )
-                    ),
-
-                    // 4. Korte Highlights (Pro & Con)
-                    el('div', { className: 'acf-fields-row' },
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Belangrijkste Pluspunt (Kort) 👍'),
-                                el('p', { className: 'description' }, 'Korte highlight regel.')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: pro,
-                                    placeholder: 'Echte stroopwafelsmaak en lekkere bite',
-                                    onChange: function (val) { setAttributes({ pro: val }); },
-                                })
-                            )
-                        ),
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Belangrijkste Minpunt (Kort) 👎'),
-                                el('p', { className: 'description' }, 'Korte minpunt regel.')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: con,
-                                    placeholder: 'Iets aan de zoete kant',
-                                    onChange: function (val) { setAttributes({ con: val }); },
-                                })
-                            )
-                        )
-                    ),
-
-                    // 5. Uitgebreide Plus- en Minpunten
-                    el('div', { className: 'acf-fields-row' },
-                        el('div', { className: 'acf-field acf-field--textarea' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Pluspunten (1 per regel)'),
-                                el('p', { className: 'description' }, 'Typ elke pluspunt op een nieuwe regel.')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextareaControl && el(TextareaControl, {
-                                    value: pluspunten,
-                                    rows: 4,
-                                    placeholder: 'Heerlijke smaak\nGoede crunch',
-                                    onChange: function (val) { setAttributes({ pluspunten: val }); },
-                                })
-                            )
-                        ),
-                        el('div', { className: 'acf-field acf-field--textarea' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Minpunten (1 per regel)'),
-                                el('p', { className: 'description' }, 'Typ elke minpunt op een nieuwe regel.')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextareaControl && el(TextareaControl, {
-                                    value: minpunten,
-                                    rows: 4,
-                                    placeholder: 'Prijzig\nSnel uitverkocht',
-                                    onChange: function (val) { setAttributes({ minpunten: val }); },
-                                })
-                            )
-                        )
-                    ),
-
-                    // 6. Review Tekst
-                    el('div', { className: 'acf-field acf-field--textarea' },
-                        el('div', { className: 'acf-label' },
-                            el('label', null, 'Introductie & Review Tekst'),
-                            el('p', { className: 'description' }, 'Uitgebreide smaakervaring en conclusie.')
-                        ),
-                        el('div', { className: 'acf-input' },
-                            TextareaControl && el(TextareaControl, {
-                                value: intro,
-                                rows: 4,
-                                placeholder: 'Schrijf hier de review...',
-                                onChange: function (val) { setAttributes({ intro: val }); },
-                            })
-                        )
-                    ),
-
-                    // 7. Optionele Knop
-                    el('div', { className: 'acf-fields-row' },
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Knop Tekst (Optioneel)'),
-                                el('p', { className: 'description' }, 'Bijv. Bekijk in de winkel')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: buttonText,
-                                    placeholder: 'Bekijk in de winkel',
-                                    onChange: function (val) { setAttributes({ buttonText: val }); },
-                                })
-                            )
-                        ),
-                        el('div', { className: 'acf-field acf-field--text' },
-                            el('div', { className: 'acf-label' },
-                                el('label', null, 'Knop Link URL'),
-                                el('p', { className: 'description' }, 'Doel URL')
-                            ),
-                            el('div', { className: 'acf-input' },
-                                TextControl && el(TextControl, {
-                                    value: buttonUrl,
-                                    placeholder: 'https://...',
-                                    onChange: function (val) { setAttributes({ buttonUrl: val }); },
-                                })
-                            )
-                        )
-                    )
-                )
-            );
-
-            // Preview View
-            const previewView = el(
-                'div',
-                { className: 'rick-block-preview-wrapper' },
-                el(
-                    'article',
-                    { className: 'rick-pepernoot-review-card' },
-                    el(
-                        'div',
-                        { className: 'rick-pepernoot-review-header' },
-                        el(
-                            'div',
-                            { className: 'rick-pepernoot-review-header__left' },
-                            el(
-                                'div',
-                                { className: 'rick-pepernoot-review-badges' },
-                                brand && el('span', { className: 'rick-review-badge rick-review-badge--brand' }, '🏷️ ' + brand),
-                                shop && el('span', { className: 'rick-review-badge rick-review-badge--shop' }, '🛒 ' + shop),
-                                price && el('span', { className: 'rick-review-badge rick-review-badge--price' }, '💶 ' + price)
-                            ),
-                            title && el('h2', { className: 'rick-pepernoot-review-title' }, title),
-                            subtitle && el('p', { className: 'rick-pepernoot-review-subtitle' }, subtitle)
-                        ),
-                        score && el(
-                            'div',
-                            { className: 'rick-pepernoot-score-circle' },
-                            el('span', { className: 'rick-pepernoot-score-star' }, '★'),
-                            el('span', { className: 'rick-pepernoot-score-number' }, score),
-                            el('span', { className: 'rick-pepernoot-score-max' }, '/10')
-                        )
-                    ),
-                    el(
-                        'div',
-                        { className: 'rick-pepernoot-review-body' },
-                        imageUrl && el(
-                            'div',
-                            { className: 'rick-pepernoot-review-media' },
-                            el('img', { src: imageUrl, alt: imageAlt || title })
-                        ),
-                        el(
-                            'div',
-                            { className: 'rick-pepernoot-review-content' },
-                            intro && el('div', { className: 'rick-pepernoot-review-intro' }, el('p', null, intro)),
-                            (pro || con) && el(
-                                'div',
-                                { className: 'rick-pepernoot-highlights' },
-                                pro && el('div', { className: 'rick-highlight-pill rick-highlight-pill--pro' }, '👍 Pluspunt: ' + pro),
-                                con && el('div', { className: 'rick-highlight-pill rick-highlight-pill--con' }, '👎 Minpunt: ' + con)
-                            )
-                        )
-                    ),
-                    (plusItems.length > 0 || minItems.length > 0) && el(
-                        'div',
-                        { className: 'rick-pepernoot-pros-cons-grid' },
-                        plusItems.length > 0 && el(
-                            'details',
-                            { className: 'rick-pros-box rick-collapsible', open: true },
-                            el('summary', { className: 'rick-pros-box__title rick-collapsible-summary' },
-                                el('div', { className: 'rick-collapsible-title-wrap' },
-                                    el('span', { className: 'rick-pros-icon' }, '✓'),
-                                    el('span', null, 'Pluspunten (' + plusItems.length + ')')
-                                ),
-                                el('span', { className: 'rick-collapsible-chevron' })
-                            ),
-                            el('div', { className: 'rick-collapsible-body' },
-                                el('ul', { className: 'rick-pros-list' },
-                                    plusItems.map(function (item, idx) { return el('li', { key: idx }, item); })
-                                )
-                            )
-                        ),
-                        minItems.length > 0 && el(
-                            'details',
-                            { className: 'rick-cons-box rick-collapsible', open: true },
-                            el('summary', { className: 'rick-cons-box__title rick-collapsible-summary' },
-                                el('div', { className: 'rick-collapsible-title-wrap' },
-                                    el('span', { className: 'rick-cons-icon' }, '✕'),
-                                    el('span', null, 'Minpunten (' + minItems.length + ')')
-                                ),
-                                el('span', { className: 'rick-collapsible-chevron' })
-                            ),
-                            el('div', { className: 'rick-collapsible-body' },
-                                el('ul', { className: 'rick-cons-list' },
-                                    minItems.map(function (item, idx) { return el('li', { key: idx }, item); })
-                                )
-                            )
-                        )
-                    ),
-                    buttonText && el(
-                        'div',
-                        { className: 'rick-pepernoot-card-footer' },
-                        el('span', { className: 'button rick-pepernoot-card-button' }, buttonText + ' →')
+                    el('p', { style: { margin: '8px 0 0 0', fontSize: '12px', color: '#b45309', display: 'flex', alignItems: 'center', gap: '6px' } },
+                        el('span', { className: 'dashicons dashicons-info' }),
+                        'Dit blok haalt automatisch alle velden (score, merk, winkel, prijs, plus- en minpunten en foto) op uit het geselecteerde Pepernoot CPT-bericht.'
                     )
                 ),
+
+                // Live Kaart Preview
                 el(
                     'div',
-                    { className: 'acf-preview-actions-overlay' },
+                    { style: { padding: '16px' } },
                     el(
-                        'button',
-                        {
-                            type: 'button',
-                            className: 'acf-preview-edit-overlay-btn',
-                            onClick: function (e) {
-                                e.stopPropagation();
-                                setMode('edit');
-                            }
-                        },
-                        el('span', { className: 'dashicons dashicons-edit' }),
-                        ' Bewerk ACF Velden'
-                    ),
-                    el(
-                        'button',
-                        {
-                            type: 'button',
-                            className: 'acf-preview-collapse-overlay-btn',
-                            onClick: function (e) {
-                                e.stopPropagation();
-                                setIsCollapsed(true);
-                            }
-                        },
-                        el('span', { className: 'dashicons dashicons-arrow-up-alt2' }),
-                        ' Inklappen'
+                        'article',
+                        { className: 'rick-pepernoot-review-card' },
+                        el(
+                            'div',
+                            { className: 'rick-pepernoot-review-header' },
+                            el(
+                                'div',
+                                { className: 'rick-pepernoot-review-header__left' },
+                                el(
+                                    'div',
+                                    { className: 'rick-pepernoot-review-badges' },
+                                    brand && el('span', { className: 'rick-review-badge rick-review-badge--brand' }, '🏷️ ' + brand),
+                                    shop && el('span', { className: 'rick-review-badge rick-review-badge--shop' }, '🛒 ' + shop),
+                                    price && el('span', { className: 'rick-review-badge rick-review-badge--price' }, '💶 ' + price)
+                                ),
+                                el('h2', { className: 'rick-pepernoot-review-title' }, postTitle),
+                                subtitle && el('p', { className: 'rick-pepernoot-review-subtitle' }, subtitle)
+                            ),
+                            score && el(
+                                'div',
+                                { className: 'rick-pepernoot-score-circle' },
+                                el('span', { className: 'rick-pepernoot-score-star' }, '★'),
+                                el('span', { className: 'rick-pepernoot-score-number' }, score),
+                                el('span', { className: 'rick-pepernoot-score-max' }, '/10')
+                            )
+                        ),
+                        el(
+                            'div',
+                            { className: 'rick-pepernoot-review-body' },
+                            imageUrl && el(
+                                'div',
+                                { className: 'rick-pepernoot-review-media' },
+                                el('img', { src: imageUrl, alt: postTitle })
+                            ),
+                            el(
+                                'div',
+                                { className: 'rick-pepernoot-review-content' },
+                                intro && el('div', { className: 'rick-pepernoot-review-intro' }, el('p', null, intro)),
+                                (pro || con) && el(
+                                    'div',
+                                    { className: 'rick-pepernoot-highlights' },
+                                    pro && el('div', { className: 'rick-highlight-pill rick-highlight-pill--pro' }, '👍 Pluspunt: ' + pro),
+                                    con && el('div', { className: 'rick-highlight-pill rick-highlight-pill--con' }, '👎 Minpunt: ' + con)
+                                )
+                            )
+                        ),
+                        (plusItems.length > 0 || minItems.length > 0) && el(
+                            'div',
+                            { className: 'rick-pepernoot-pros-cons-grid' },
+                            plusItems.length > 0 && el(
+                                'details',
+                                { className: 'rick-pros-box rick-collapsible', open: true },
+                                el('summary', { className: 'rick-pros-box__title rick-collapsible-summary' },
+                                    el('div', { className: 'rick-collapsible-title-wrap' },
+                                        el('span', { className: 'rick-pros-icon' }, '✓'),
+                                        el('span', null, 'Pluspunten (' + plusItems.length + ')')
+                                    ),
+                                    el('span', { className: 'rick-collapsible-chevron' })
+                                ),
+                                el('div', { className: 'rick-collapsible-body' },
+                                    el('ul', { className: 'rick-pros-list' },
+                                        plusItems.map(function (item, idx) { return el('li', { key: idx }, item); })
+                                    )
+                                )
+                            ),
+                            minItems.length > 0 && el(
+                                'details',
+                                { className: 'rick-cons-box rick-collapsible', open: true },
+                                el('summary', { className: 'rick-cons-box__title rick-collapsible-summary' },
+                                    el('div', { className: 'rick-collapsible-title-wrap' },
+                                        el('span', { className: 'rick-cons-icon' }, '✕'),
+                                        el('span', null, 'Minpunten (' + minItems.length + ')')
+                                    ),
+                                    el('span', { className: 'rick-collapsible-chevron' })
+                                ),
+                                el('div', { className: 'rick-collapsible-body' },
+                                    el('ul', { className: 'rick-cons-list' },
+                                        minItems.map(function (item, idx) { return el('li', { key: idx }, item); })
+                                    )
+                                )
+                            )
+                        ),
+                        buttonText && el(
+                            'div',
+                            { className: 'rick-pepernoot-card-footer' },
+                            el('span', { className: 'button rick-pepernoot-card-button' }, buttonText + ' →')
+                        )
                     )
                 )
             );
@@ -472,7 +327,8 @@
                 Fragment,
                 null,
                 editToggleToolbar,
-                el('div', blockProps, isCollapsed ? collapsedView : (mode === 'edit' ? acfFormView : previewView))
+                sidebarControls,
+                el('div', blockProps, isCollapsed ? collapsedView : mainView)
             );
         },
         save: function () {

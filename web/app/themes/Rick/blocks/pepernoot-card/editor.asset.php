@@ -6,6 +6,7 @@ return [
         'wp-block-editor',
         'wp-components',
         'wp-i18n',
+        'wp-api-fetch',
     ],
     'version' => time(),
 ];
