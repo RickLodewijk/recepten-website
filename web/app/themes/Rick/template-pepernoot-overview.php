@@ -2,7 +2,7 @@
 
 /*
 Template Name: Overview pepernoten
-Description: Page template that overviews all pepernoten with their ACF fields (score, brand, shop, price, pros and cons)
+Description: Page template that overviews all pepernoten with their ACF fields (score, brand, shop, price, pros and cons) 
 */
 
 get_header();
