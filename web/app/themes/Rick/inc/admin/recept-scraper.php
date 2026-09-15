@@ -97,6 +97,113 @@ function rick_handle_toggle_zelf_gemaakt() {
     exit;
 }
 
+// 2b. Bulk Actions toevoegen aan de bulkacties-dropdown
+add_filter( 'bulk_actions-edit-recept', 'rick_register_recept_bulk_actions' );
+function rick_register_recept_bulk_actions( $bulk_actions ) {
+    $bulk_actions['mark_zelf_gemaakt'] = '👨‍🍳 Markeer als: Zelf gemaakt';
+    $bulk_actions['mark_niet_zelf_gemaakt'] = '⏳ Markeer als: Nog niet gemaakt';
+    return $bulk_actions;
+}
+
+// Bulk Actions afhandelen
+add_filter( 'handle_bulk_actions-edit-recept', 'rick_handle_recept_bulk_actions', 10, 3 );
+function rick_handle_recept_bulk_actions( $redirect_to, $doaction, $post_ids ) {
+    if ( ! in_array( $doaction, array( 'mark_zelf_gemaakt', 'mark_niet_zelf_gemaakt' ), true ) ) {
+        return $redirect_to;
+    }
+
+    $new_val = ( $doaction === 'mark_zelf_gemaakt' ) ? '1' : '0';
+    $count = 0;
+
+    foreach ( $post_ids as $post_id ) {
+        if ( current_user_can( 'edit_post', $post_id ) ) {
+            if ( function_exists( 'update_field' ) ) {
+                update_field( 'is_zelf_gemaakt', ( $new_val === '1' ), $post_id );
+            }
+            update_post_meta( $post_id, 'is_zelf_gemaakt', $new_val );
+            $count++;
+        }
+    }
+
+    $redirect_to = add_query_arg( array(
+        'bulk_zelf_gemaakt_count' => $count,
+        'bulk_zelf_gemaakt_action' => $doaction,
+    ), $redirect_to );
+
+    return $redirect_to;
+}
+
+// Melding tonen na uitvoeren bulkactie
+add_action( 'admin_notices', 'rick_recept_bulk_action_admin_notice' );
+function rick_recept_bulk_action_admin_notice() {
+    global $pagenow;
+    if ( $pagenow === 'edit.php' && isset( $_GET['post_type'] ) && $_GET['post_type'] === 'recept' && ! empty( $_GET['bulk_zelf_gemaakt_count'] ) ) {
+        $count = (int) $_GET['bulk_zelf_gemaakt_count'];
+        $action = isset( $_GET['bulk_zelf_gemaakt_action'] ) ? sanitize_text_field( $_GET['bulk_zelf_gemaakt_action'] ) : '';
+        $label = ( $action === 'mark_zelf_gemaakt' ) ? 'gemarkeerd als: Zelf gemaakt' : 'gemarkeerd als: Nog niet gemaakt';
+
+        echo '<div class="notice notice-success is-dismissible" style="padding:10px 14px;">';
+        echo '<p style="margin:0;font-size:14px;">🎉 <strong>' . sprintf( '%d recept(en) succesvol %s.', $count, $label ) . '</strong></p>';
+        echo '</div>';
+    }
+}
+
+// 2c. Filter dropdown toevoegen aan de lijst (boven de tabel)
+add_action( 'restrict_manage_posts', 'rick_recept_table_filter_dropdown' );
+function rick_recept_table_filter_dropdown( $post_type ) {
+    if ( $post_type !== 'recept' ) {
+        return;
+    }
+
+    $current_filter = isset( $_GET['filter_zelf_gemaakt'] ) ? sanitize_text_field( $_GET['filter_zelf_gemaakt'] ) : '';
+    ?>
+    <select name="filter_zelf_gemaakt" id="filter_zelf_gemaakt">
+        <option value="">Alle recepten (Zelf gemaakt & niet)</option>
+        <option value="ja" <?php selected( $current_filter, 'ja' ); ?>>✅ Alleen zelf gemaakt</option>
+        <option value="nee" <?php selected( $current_filter, 'nee' ); ?>>⏳ Alleen nog niet gemaakt</option>
+    </select>
+    <?php
+}
+
+add_filter( 'parse_query', 'rick_recept_table_filter_query' );
+function rick_recept_table_filter_query( $query ) {
+    global $pagenow;
+    $is_admin_recept_list = is_admin() && $pagenow === 'edit.php' && isset( $_GET['post_type'] ) && $_GET['post_type'] === 'recept';
+
+    if ( ! $is_admin_recept_list || ! isset( $_GET['filter_zelf_gemaakt'] ) || $_GET['filter_zelf_gemaakt'] === '' ) {
+        return;
+    }
+
+    $filter = sanitize_text_field( $_GET['filter_zelf_gemaakt'] );
+    $meta_query = $query->get( 'meta_query' );
+    if ( ! is_array( $meta_query ) ) {
+        $meta_query = array();
+    }
+
+    if ( $filter === 'ja' ) {
+        $meta_query[] = array(
+            'key'     => 'is_zelf_gemaakt',
+            'value'   => '1',
+            'compare' => '=',
+        );
+    } elseif ( $filter === 'nee' ) {
+        $meta_query[] = array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'is_zelf_gemaakt',
+                'value'   => '1',
+                'compare' => '!=',
+            ),
+            array(
+                'key'     => 'is_zelf_gemaakt',
+                'compare' => 'NOT EXISTS',
+            ),
+        );
+    }
+
+    $query->set( 'meta_query', $meta_query );
+}
+
 // 3. Render de Scraper Admin Pagina
 function rick_render_recept_scraper_page() {
     $message = '';
