@@ -209,22 +209,42 @@ function rick_render_recept_scraper_page() {
     $message = '';
     $error = '';
     $created_post_id = 0;
+    $active_tab = isset( $_POST['import_method'] ) && $_POST['import_method'] === 'raw_html' ? 'raw_html' : 'url';
 
     if ( isset( $_POST['rick_scrape_nonce'] ) && wp_verify_nonce( $_POST['rick_scrape_nonce'], 'rick_scrape_action' ) ) {
-        $url = isset( $_POST['recipe_url'] ) ? esc_url_raw( trim( $_POST['recipe_url'] ) ) : '';
-        $post_status = isset( $_POST['post_status'] ) && in_array( $_POST['post_status'], array( 'publish', 'draft' ) ) ? $_POST['post_status'] : 'draft';
+        $import_method   = isset( $_POST['import_method'] ) ? sanitize_text_field( $_POST['import_method'] ) : 'url';
+        $post_status     = isset( $_POST['post_status'] ) && in_array( $_POST['post_status'], array( 'publish', 'draft' ) ) ? $_POST['post_status'] : 'draft';
         $is_zelf_gemaakt = ! empty( $_POST['is_zelf_gemaakt'] ) ? 1 : 0;
-        $category_id = ! empty( $_POST['recept_categorie'] ) ? (int) $_POST['recept_categorie'] : 0;
+        $category_id     = ! empty( $_POST['recept_categorie'] ) ? (int) $_POST['recept_categorie'] : 0;
 
-        if ( empty( $url ) || ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-            $error = 'Voer een geldige URL in.';
-        } else {
-            $result = rick_import_recipe_from_url( $url, $post_status, $is_zelf_gemaakt, $category_id );
-            if ( is_wp_error( $result ) ) {
-                $error = $result->get_error_message();
+        if ( $import_method === 'raw_html' ) {
+            $raw_content = isset( $_POST['raw_recipe_content'] ) ? wp_unslash( $_POST['raw_recipe_content'] ) : '';
+            $source_url  = isset( $_POST['raw_source_url'] ) ? esc_url_raw( trim( $_POST['raw_source_url'] ) ) : '';
+
+            if ( empty( trim( $raw_content ) ) ) {
+                $error = 'Plak de broncode of JSON-LD van de receptpagina in het tekstveld.';
             } else {
-                $created_post_id = $result;
-                $message = 'Het recept is succesvol binnengehaald!';
+                $result = rick_import_recipe_from_html( $raw_content, $source_url, $post_status, $is_zelf_gemaakt, $category_id );
+                if ( is_wp_error( $result ) ) {
+                    $error = $result->get_error_message();
+                } else {
+                    $created_post_id = $result;
+                    $message = 'Het recept is succesvol binnengehaald vanuit de geplakte broncode!';
+                }
+            }
+        } else {
+            $url = isset( $_POST['recipe_url'] ) ? esc_url_raw( trim( $_POST['recipe_url'] ) ) : '';
+
+            if ( empty( $url ) || ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+                $error = 'Voer een geldige URL in.';
+            } else {
+                $result = rick_import_recipe_from_url( $url, $post_status, $is_zelf_gemaakt, $category_id );
+                if ( is_wp_error( $result ) ) {
+                    $error = $result->get_error_message();
+                } else {
+                    $created_post_id = $result;
+                    $message = 'Het recept is succesvol binnengehaald!';
+                }
             }
         }
     }
@@ -234,19 +254,24 @@ function rick_render_recept_scraper_page() {
         'hide_empty' => false,
     ) );
     ?>
-    <div class="wrap" style="max-width: 860px;">
-        <h1 style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-            <span>📥 Recept Importeren via Link</span>
+    <div class="wrap" style="max-width: 880px;">
+        <h1 style="display:flex;align-items:center;gap:10px;margin-bottom:15px;">
+            <span>📥 Recept Importeren</span>
         </h1>
 
         <?php if ( ! empty( $error ) ) : ?>
-            <div class="notice notice-error is-dismissible">
-                <p><strong>Fout:</strong> <?php echo esc_html( $error ); ?></p>
+            <div class="notice notice-error is-dismissible" style="padding:12px 16px;">
+                <p style="font-size:14px;margin:0 0 6px 0;"><strong>Fout:</strong> <?php echo esc_html( $error ); ?></p>
+                <?php if ( strpos( $error, '403' ) !== false || strpos( $error, 'blokkeerde' ) !== false ) : ?>
+                    <p style="margin:4px 0 0;font-size:13px;color:#475569;">
+                        💡 <strong>Slimme oplossing:</strong> Open de pagina in je browser, druk op <code>Ctrl+U</code> (of klik rechts &rarr; <em>Paginabron weergeven</em>), kopieer alles (<code>Ctrl+A</code>, <code>Ctrl+C</code>) en plak het in het tabblad <strong>Direct Broncode Plakken</strong> hieronder.
+                    </p>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 
         <?php if ( ! empty( $message ) && $created_post_id ) : ?>
-            <div class="notice notice-success is-dismissible" style="padding:12px 15px;">
+            <div class="notice notice-success is-dismissible" style="padding:14px 18px;border-left-color:#16a34a;">
                 <p style="font-size:15px;margin:0 0 10px 0;"><strong>🎉 <?php echo esc_html( $message ); ?></strong></p>
                 <div style="display:flex;gap:10px;">
                     <a href="<?php echo esc_url( get_edit_post_link( $created_post_id ) ); ?>" class="button button-primary">
@@ -259,14 +284,26 @@ function rick_render_recept_scraper_page() {
             </div>
         <?php endif; ?>
 
-        <div class="postbox" style="padding: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+        <!-- Tab navigatie -->
+        <h2 class="nav-tab-wrapper" style="margin-bottom: 20px;">
+            <a href="#tab-url" class="nav-tab <?php echo $active_tab === 'url' ? 'nav-tab-active' : ''; ?>" onclick="rickSwitchTab(event, 'tab-url')">
+                🌐 1. Importeren via Link (URL)
+            </a>
+            <a href="#tab-raw" class="nav-tab <?php echo $active_tab === 'raw_html' ? 'nav-tab-active' : ''; ?>" onclick="rickSwitchTab(event, 'tab-raw')">
+                📋 2. Direct Broncode / Tekst Plakken (Fallback)
+            </a>
+        </h2>
+
+        <!-- TAB 1: VIA URL -->
+        <div id="tab-url-panel" class="postbox" style="padding: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); <?php echo $active_tab === 'raw_html' ? 'display:none;' : ''; ?>">
             <p style="margin-top:0;font-size:14px;color:#4b5563;">
                 Plak hieronder de link van een receptenwebsite (zoals <strong>Allerhande (AH)</strong>, <strong>Lekker en Simpel</strong>, <strong>24Kitchen</strong>, <strong>Rutger Bakt</strong>, <strong>Smulweb</strong>, etc.). 
-                De scraper leest de titel, afbeelding, bereidingstijd, ingrediënten en bereidingswijze automatisch uit en zet deze direct in jouw receptenformaat.
+                De scraper leest automatisch de titel, afbeelding, bereidingstijd, ingrediënten en bereidingsstappen uit.
             </p>
 
             <form method="post" action="">
                 <?php wp_nonce_field( 'rick_scrape_action', 'rick_scrape_nonce' ); ?>
+                <input type="hidden" name="import_method" value="url">
 
                 <table class="form-table" role="presentation">
                     <tbody>
@@ -282,10 +319,10 @@ function rick_render_recept_scraper_page() {
 
                         <tr>
                             <th scope="row">
-                                <label for="post_status"><strong>Status na import</strong></label>
+                                <label for="post_status_url"><strong>Status na import</strong></label>
                             </th>
                             <td>
-                                <select name="post_status" id="post_status" style="padding:4px 8px;">
+                                <select name="post_status" id="post_status_url" style="padding:4px 8px;">
                                     <option value="draft">Concept (Aanbevolen - eerst even nakijken)</option>
                                     <option value="publish">Direct publiceren</option>
                                 </select>
@@ -295,10 +332,10 @@ function rick_render_recept_scraper_page() {
                         <?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
                             <tr>
                                 <th scope="row">
-                                    <label for="recept_categorie"><strong>Categorie (optioneel)</strong></label>
+                                    <label for="recept_categorie_url"><strong>Categorie (optioneel)</strong></label>
                                 </th>
                                 <td>
-                                    <select name="recept_categorie" id="recept_categorie" style="padding:4px 8px;">
+                                    <select name="recept_categorie" id="recept_categorie_url" style="padding:4px 8px;">
                                         <option value="">-- Geen / later kiezen --</option>
                                         <?php foreach ( $categories as $cat ) : ?>
                                             <option value="<?php echo esc_attr( $cat->term_id ); ?>"><?php echo esc_html( $cat->name ); ?></option>
@@ -331,6 +368,112 @@ function rick_render_recept_scraper_page() {
             </form>
         </div>
 
+        <!-- TAB 2: DIRECT BRONCODE PLAKKEN (ULTIEME FALLBACK) -->
+        <div id="tab-raw-panel" class="postbox" style="padding: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); <?php echo $active_tab === 'url' ? 'display:none;' : ''; ?>">
+            <p style="margin-top:0;font-size:14px;color:#4b5563;">
+                Wordt een website beveiligd tegen geautomatiseerde downloads (zoals een 403-fout bij bepaalde netwerken)? 
+                <strong>Geen probleem!</strong> Je kunt hieronder direct de broncode van de pagina plakken.
+            </p>
+            <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:10px 14px;border-radius:6px;margin-bottom:15px;font-size:13px;color:#334155;">
+                <strong>Hoe doe je dit in 5 seconden?</strong><br>
+                1. Open het recept in je browser.<br>
+                2. Druk op <kbd style="background:#fff;border:1px solid #cbd5e1;padding:1px 5px;border-radius:3px;">Ctrl</kbd> + <kbd style="background:#fff;border:1px solid #cbd5e1;padding:1px 5px;border-radius:3px;">U</kbd> (of klik rechts &rarr; <em>Paginabron weergeven</em>).<br>
+                3. Selecteer alles (<kbd>Ctrl+A</kbd>), kopieer (<kbd>Ctrl+C</kbd>) en plak het hieronder!
+            </div>
+
+            <form method="post" action="">
+                <?php wp_nonce_field( 'rick_scrape_action', 'rick_scrape_nonce' ); ?>
+                <input type="hidden" name="import_method" value="raw_html">
+
+                <table class="form-table" role="presentation">
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <label for="raw_source_url"><strong>Originele Link (URL)</strong></label>
+                            </th>
+                            <td>
+                                <input name="raw_source_url" type="url" id="raw_source_url" placeholder="https://www.ah.nl/allerhande/recept/..." class="large-text" style="padding:6px 10px;" />
+                                <p class="description">Handig zodat de bronvermelding netjes naar de website verwijst.</p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">
+                                <label for="raw_recipe_content"><strong>Paginabron / HTML / JSON</strong> <span style="color:red;">*</span></label>
+                            </th>
+                            <td>
+                                <textarea name="raw_recipe_content" id="raw_recipe_content" rows="8" class="large-text" placeholder="Plak hier de HTML broncode van de receptpagina..." style="font-family:monospace;font-size:12px;"></textarea>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">
+                                <label for="post_status_raw"><strong>Status na import</strong></label>
+                            </th>
+                            <td>
+                                <select name="post_status" id="post_status_raw" style="padding:4px 8px;">
+                                    <option value="draft">Concept (Aanbevolen)</option>
+                                    <option value="publish">Direct publiceren</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
+                            <tr>
+                                <th scope="row">
+                                    <label for="recept_categorie_raw"><strong>Categorie (optioneel)</strong></label>
+                                </th>
+                                <td>
+                                    <select name="recept_categorie" id="recept_categorie_raw" style="padding:4px 8px;">
+                                        <option value="">-- Geen / later kiezen --</option>
+                                        <?php foreach ( $categories as $cat ) : ?>
+                                            <option value="<?php echo esc_attr( $cat->term_id ); ?>"><?php echo esc_html( $cat->name ); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+
+                        <tr>
+                            <th scope="row">
+                                <strong>Zelf gemaakt</strong>
+                            </th>
+                            <td>
+                                <label style="display:inline-flex;align-items:center;gap:8px;font-size:14px;">
+                                    <input type="checkbox" name="is_zelf_gemaakt" value="1" />
+                                    <span>Ik heb dit recept al eens zelf gemaakt</span>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top:20px;padding-top:15px;border-top:1px solid #e5e7eb;">
+                    <button type="submit" class="button button-primary button-hero" style="display:inline-flex;align-items:center;gap:8px;">
+                        <span>📋 Verwerk Geplakte Broncode & Voeg Toe</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+        function rickSwitchTab(e, targetId) {
+            e.preventDefault();
+            document.querySelectorAll('.nav-tab-wrapper .nav-tab').forEach(function(tab) {
+                tab.classList.remove('nav-tab-active');
+            });
+            e.currentTarget.classList.add('nav-tab-active');
+
+            if (targetId === 'tab-url') {
+                document.getElementById('tab-url-panel').style.display = 'block';
+                document.getElementById('tab-raw-panel').style.display = 'none';
+            } else {
+                document.getElementById('tab-url-panel').style.display = 'none';
+                document.getElementById('tab-raw-panel').style.display = 'block';
+            }
+        }
+        </script>
+
         <div style="margin-top:24px;color:#6b7280;font-size:13px;line-height:1.6;">
             <strong>💡 Hoe werkt het?</strong>
             <ul style="list-style:disc;margin-left:20px;margin-top:6px;">
@@ -343,32 +486,96 @@ function rick_render_recept_scraper_page() {
     <?php
 }
 
-// 4. De Scraper Engine
-function rick_import_recipe_from_url( $url, $post_status = 'draft', $is_zelf_gemaakt = 0, $category_id = 0 ) {
-    $response = wp_remote_get( $url, array(
-        'timeout'     => 20,
+// 4. De Scraper Engine & HTTP Fetcher
+function rick_fetch_remote_url( $url ) {
+    $clean_url = esc_url_raw( trim( $url ) );
+
+    $headers = array(
+        'User-Agent'                => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept'                    => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language'           => 'nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Sec-Ch-Ua'                 => '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        'Sec-Ch-Ua-Mobile'          => '?0',
+        'Sec-Ch-Ua-Platform'        => '"Windows"',
+        'Sec-Fetch-Dest'            => 'document',
+        'Sec-Fetch-Mode'            => 'navigate',
+        'Sec-Fetch-Site'            => 'none',
+        'Sec-Fetch-User'            => '?1',
+        'Upgrade-Insecure-Requests' => '1',
+        'Cache-Control'             => 'max-age=0',
+    );
+
+    // Poging 1: wp_remote_get met complete moderne browser headers
+    $response = wp_remote_get( $clean_url, array(
+        'timeout'     => 25,
         'redirection' => 5,
-        'user-agent'  => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        'headers'     => array(
-            'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language' => 'nl-NL,nl;q=0.9,en-US;q=0.8,en;q=0.7',
-        ),
+        'headers'     => $headers,
         'sslverify'   => false,
     ) );
 
-    if ( is_wp_error( $response ) ) {
-        return new WP_Error( 'http_failed', 'Kan de pagina niet bereiken: ' . $response->get_error_message() );
+    $code = ! is_wp_error( $response ) ? wp_remote_retrieve_response_code( $response ) : 0;
+    $body = ! is_wp_error( $response ) ? wp_remote_retrieve_body( $response ) : '';
+
+    if ( $code === 200 && ! empty( $body ) ) {
+        return array( 'code' => 200, 'body' => $body );
     }
 
-    $response_code = wp_remote_retrieve_response_code( $response );
-    if ( $response_code !== 200 ) {
-        return new WP_Error( 'http_error', 'De website reageerde met statuscode ' . $response_code );
+    // Poging 2: Fallback met native cURL (HTTP/2 ondersteuning, essentieel voor Akamai/AH)
+    if ( function_exists( 'curl_init' ) ) {
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_URL, $clean_url );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+        curl_setopt( $ch, CURLOPT_MAXREDIRS, 5 );
+        curl_setopt( $ch, CURLOPT_TIMEOUT, 25 );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, 0 );
+        curl_setopt( $ch, CURLOPT_ENCODING, '' ); // Automatische decompressie van gzip/deflate/br
+
+        if ( defined( 'CURL_HTTP_VERSION_2_0' ) ) {
+            curl_setopt( $ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0 );
+        }
+
+        $curl_headers = array();
+        foreach ( $headers as $k => $v ) {
+            $curl_headers[] = "{$k}: {$v}";
+        }
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, $curl_headers );
+
+        $curl_body = curl_exec( $ch );
+        $curl_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+        curl_close( $ch );
+
+        if ( $curl_code === 200 && ! empty( $curl_body ) ) {
+            return array( 'code' => 200, 'body' => $curl_body );
+        }
+
+        if ( $curl_code > 0 ) {
+            $code = $curl_code;
+        }
     }
 
-    $html = wp_remote_retrieve_body( $response );
-    if ( empty( $html ) ) {
-        return new WP_Error( 'empty_body', 'De webpagina gaf geen inhoud terug.' );
+    $error_msg = is_wp_error( $response ) ? $response->get_error_message() : "De website reageerde met statuscode {$code}.";
+    return new WP_Error( 'http_error', $error_msg, array( 'status' => $code ) );
+}
+
+function rick_import_recipe_from_url( $url, $post_status = 'draft', $is_zelf_gemaakt = 0, $category_id = 0 ) {
+    $fetch_result = rick_fetch_remote_url( $url );
+
+    if ( is_wp_error( $fetch_result ) ) {
+        $code = $fetch_result->get_error_data();
+        $code_num = is_array( $code ) && isset( $code['status'] ) ? $code['status'] : 0;
+        if ( $code_num === 403 ) {
+            return new WP_Error( 'http_403', 'De website blokkeerde het verzoek met een 403-fout (beveiliging tegen geautomatiseerde verzoeken). Tip: gebruik het tabblad "Direct Broncode Plakken" hieronder om het recept alsnog direct in te laden!' );
+        }
+        return $fetch_result;
     }
+
+    $html = $fetch_result['body'];
+    return rick_import_recipe_from_html( $html, $url, $post_status, $is_zelf_gemaakt, $category_id );
+}
+
+function rick_import_recipe_from_html( $html, $url = '', $post_status = 'draft', $is_zelf_gemaakt = 0, $category_id = 0 ) {
 
     // Bepaal bronnaam op basis van het domein
     $host = parse_url( $url, PHP_URL_HOST );
