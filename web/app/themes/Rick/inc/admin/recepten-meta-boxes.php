@@ -57,6 +57,26 @@ function rick_render_recept_meta_box( $post ) {
             'type' => 'textarea',
             'description' => 'De tip onderaan de pagina',
         ),
+        'is_zelf_gemaakt' => array(
+            'label' => 'Is een keer zelf gemaakt',
+            'type' => 'checkbox',
+            'description' => 'Vink aan als je dit recept al eens zelf gemaakt hebt',
+        ),
+        'is_geautomatiseerd' => array(
+            'label' => 'Automatisch geïmporteerd',
+            'type' => 'checkbox',
+            'description' => 'Aangevinkt indien binnengehaald via scraper',
+        ),
+        'bron_naam' => array(
+            'label' => 'Bron naam',
+            'type' => 'text',
+            'description' => 'Bijv: Allerhande, 24Kitchen',
+        ),
+        'bron_url' => array(
+            'label' => 'Bron URL / Link',
+            'type' => 'url',
+            'description' => 'Link naar origineel online recept',
+        ),
     );
 
     echo '<div class="rick-recept-meta-box">';
@@ -65,12 +85,19 @@ function rick_render_recept_meta_box( $post ) {
         $value = get_post_meta($post->ID, $name, true);
 
         echo '<p style="margin: 0 0 1rem;">';
-        echo '<label for="' . esc_attr( $name ) . '" style="display:block;font-weight:600;margin-bottom:0.35rem;">' . esc_html( $field['label'] ) . '</label>';
 
-        if ( $field['type'] === 'textarea' ) {
-            echo '<textarea id="' . esc_attr( $name ) . '" name="' . esc_attr( $name ) . '" rows="5" style="width:100%;">' . esc_textarea( $value ) . '</textarea>';
+        if ( $field['type'] === 'checkbox' ) {
+            echo '<label style="display:inline-flex;align-items:center;gap:8px;font-weight:600;cursor:pointer;">';
+            echo '<input id="' . esc_attr( $name ) . '" name="' . esc_attr( $name ) . '" type="checkbox" value="1" ' . checked( $value, '1', false ) . ' /> ';
+            echo esc_html( $field['label'] );
+            echo '</label>';
         } else {
-            echo '<input id="' . esc_attr( $name ) . '" name="' . esc_attr( $name ) . '" type="' . esc_attr( $field['type'] ) . '" value="' . esc_attr( $value ) . '" style="width:100%;" />';
+            echo '<label for="' . esc_attr( $name ) . '" style="display:block;font-weight:600;margin-bottom:0.35rem;">' . esc_html( $field['label'] ) . '</label>';
+            if ( $field['type'] === 'textarea' ) {
+                echo '<textarea id="' . esc_attr( $name ) . '" name="' . esc_attr( $name ) . '" rows="5" style="width:100%;">' . esc_textarea( $value ) . '</textarea>';
+            } else {
+                echo '<input id="' . esc_attr( $name ) . '" name="' . esc_attr( $name ) . '" type="' . esc_attr( $field['type'] ) . '" value="' . esc_attr( $value ) . '" style="width:100%;" />';
+            }
         }
 
         if ( ! empty( $field['description'] ) ) {
@@ -104,11 +131,20 @@ function rick_save_recept_meta_box( $post_id ) {
         'ingredienten',
         'bereidingswijze',
         'bakker_tip',
+        'bron_naam',
+        'bron_url',
     );
 
     foreach ( $fields as $field_name ) {
         $value = isset( $_POST[ $field_name ] ) ? wp_unslash( $_POST[ $field_name ] ) : '';
         $sanitized_value = in_array( $field_name, array('intro_tekst', 'ingredienten', 'bereidingswijze', 'bakker_tip'), true ) ? sanitize_textarea_field( $value ) : sanitize_text_field( $value );
         update_post_meta( $post_id, $field_name, $sanitized_value );
+    }
+
+    // Checkboxen
+    $checkboxes = array( 'is_zelf_gemaakt', 'is_geautomatiseerd' );
+    foreach ( $checkboxes as $cb ) {
+        $cb_val = ! empty( $_POST[ $cb ] ) ? '1' : '0';
+        update_post_meta( $post_id, $cb, $cb_val );
     }
 }

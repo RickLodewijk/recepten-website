@@ -228,6 +228,83 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_rick_is_zelf_gemaakt",
+            "label": "Is een keer zelf gemaakt",
+            "name": "is_zelf_gemaakt",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Vink aan als je dit recept zelf hebt gemaakt en getest.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "Ja, dit recept is al eens zelf gemaakt",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Ja",
+            "ui_off_text": "Nee"
+        },
+        {
+            "key": "field_rick_is_geautomatiseerd",
+            "label": "Automatisch geïmporteerd",
+            "name": "is_geautomatiseerd",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Geeft aan of het recept automatisch is binnengehaald.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "Automatisch binnengehaald via import",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "Ja",
+            "ui_off_text": "Nee"
+        },
+        {
+            "key": "field_rick_bron_naam",
+            "label": "Bron van recept (Naam)",
+            "name": "bron_naam",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Bijv: Allerhande, Lekker en Simpel, 24Kitchen",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "Bijv. Allerhande",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_rick_bron_url",
+            "label": "Bron van recept (Link / URL)",
+            "name": "bron_url",
+            "aria-label": "",
+            "type": "url",
+            "instructions": "Link naar het originele recept op internet",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "https://..."
         }
     ],
     "location": [

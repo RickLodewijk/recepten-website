@@ -15,6 +15,11 @@ if (have_posts()):
         $bakker_tip = rick_get_recept_field('bakker_tip');
         $recipe_color = rick_get_recept_primary_category_color(get_the_ID());
 
+        $is_zelf_gemaakt = rick_get_recept_field('is_zelf_gemaakt');
+        $bron_naam = rick_get_recept_field('bron_naam');
+        $bron_url = rick_get_recept_field('bron_url');
+        $is_geautomatiseerd = rick_get_recept_field('is_geautomatiseerd');
+
         $kcal = rick_get_recept_field('kcal');
         $eiwitten = rick_get_recept_field('eiwitten');
         $koolhydraten = rick_get_recept_field('koolhydraten');
@@ -47,9 +52,25 @@ if (have_posts()):
 
                     <h1><?php the_title(); ?></h1>
 
-                    <?php if ($bereidingstijd): ?>
-                        <span class="badge">Totale bereidingstijd: <?php echo esc_html($bereidingstijd); ?></span>
-                    <?php endif; ?>
+                    <div class="recipe-meta-badges">
+                        <?php if ($bereidingstijd): ?>
+                            <span class="badge badge--time">Totale bereidingstijd: <?php echo esc_html($bereidingstijd); ?></span>
+                        <?php endif; ?>
+
+                        <?php if ($is_zelf_gemaakt == '1' || $is_zelf_gemaakt === true): ?>
+                            <span class="badge badge--tested" title="Zelf gemaakt en getest">👨‍🍳 Zelf gemaakt &amp; getest</span>
+                        <?php else: ?>
+                            <span class="badge badge--untested" title="Nog niet zelf getest">📋 Nog niet zelf getest</span>
+                        <?php endif; ?>
+
+                        <?php if (!empty($bron_url)): ?>
+                            <a href="<?php echo esc_url($bron_url); ?>" target="_blank" rel="noopener noreferrer" class="badge badge--source" title="Bekijk origineel">
+                                🌐 Bron: <?php echo esc_html(!empty($bron_naam) ? $bron_naam : 'Origineel'); ?>
+                            </a>
+                        <?php elseif (!empty($bron_naam)): ?>
+                            <span class="badge badge--source">🌐 Bron: <?php echo esc_html($bron_naam); ?></span>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <?php if ($recept_afbeelding): ?>
