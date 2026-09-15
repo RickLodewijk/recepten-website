@@ -83,3 +83,53 @@ function rick_get_recept_primary_category_color( $post_id = null ) {
 
     return rick_get_term_color( $term );
 }
+
+/**
+ * Zoek recept IDs op basis van titel, ingrediënten, intro, meta_info en bereidingswijze.
+ */
+function rick_search_recept_ids( $search_term ) {
+    $search_term = trim( $search_term );
+    if ( empty( $search_term ) ) {
+        return array();
+    }
+
+    $title_ids = get_posts( array(
+        'post_type'      => 'recept',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'post_status'    => 'publish',
+        's'              => $search_term,
+    ) );
+
+    $meta_ids = get_posts( array(
+        'post_type'      => 'recept',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'post_status'    => 'publish',
+        'meta_query'     => array(
+            'relation' => 'OR',
+            array(
+                'key'     => 'ingredienten',
+                'value'   => $search_term,
+                'compare' => 'LIKE',
+            ),
+            array(
+                'key'     => 'intro_tekst',
+                'value'   => $search_term,
+                'compare' => 'LIKE',
+            ),
+            array(
+                'key'     => 'meta_info',
+                'value'   => $search_term,
+                'compare' => 'LIKE',
+            ),
+            array(
+                'key'     => 'bereidingswijze',
+                'value'   => $search_term,
+                'compare' => 'LIKE',
+            ),
+        ),
+    ) );
+
+    return array_unique( array_merge( (array) $title_ids, (array) $meta_ids ) );
+}

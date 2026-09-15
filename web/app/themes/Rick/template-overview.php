@@ -16,8 +16,13 @@ $args = array(
     'order' => 'ASC',
 );
 
-if ($search_query) {
-    $args['s'] = $search_query;
+if ( ! empty( $search_query ) ) {
+    $matching_ids = function_exists('rick_search_recept_ids') ? rick_search_recept_ids( $search_query ) : array();
+    if ( empty( $matching_ids ) ) {
+        $args['post__in'] = array( 0 );
+    } else {
+        $args['post__in'] = $matching_ids;
+    }
 }
 
 if ($category_filter) {
@@ -36,7 +41,8 @@ $query = new WP_Query($args);
 <section class="home-hero">
     <div class="container">
         <h2>Ontdek heerlijke recepten</h2>
-        <form class="recipe-filters" method="GET" action="<?php echo esc_url(home_url('/')); ?>">
+        <form class="recipe-filters" method="GET" action="<?php echo esc_url(get_post_type_archive_link('recept') ?: home_url('/')); ?>">
+            <input type="hidden" name="post_type" value="recept">
             <div class="filter-group search-group">
                 <input type="text" name="s_recept" placeholder="Zoek een recept..." value="<?php echo esc_attr($search_query); ?>">
             </div>

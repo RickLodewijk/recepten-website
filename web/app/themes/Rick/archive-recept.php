@@ -26,8 +26,13 @@ $args = array(
     'order'          => 'DESC',
 );
 
-if ($search_query) {
-    $args['s'] = $search_query;
+if ( ! empty( $search_query ) ) {
+    $matching_ids = rick_search_recept_ids( $search_query );
+    if ( empty( $matching_ids ) ) {
+        $args['post__in'] = array( 0 );
+    } else {
+        $args['post__in'] = $matching_ids;
+    }
 }
 
 if ($category_filter) {
@@ -52,6 +57,7 @@ $query = new WP_Query($args);
         </p>
 
         <form class="recipe-filters" method="GET" action="<?php echo esc_url(get_post_type_archive_link('recept')); ?>">
+            <input type="hidden" name="post_type" value="recept">
             <div class="filter-group search-group">
                 <input type="text" name="s_recept" placeholder="Zoek op ingrediënt of gerecht..." value="<?php echo esc_attr($search_query); ?>">
             </div>
