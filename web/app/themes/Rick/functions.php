@@ -7,7 +7,7 @@ require_once get_theme_file_path('inc/admin/recepten-meta-boxes.php');
 require_once get_theme_file_path('inc/admin/baktips-acf.php');
 require_once get_theme_file_path('inc/admin/pepernoten-acf.php');
 require_once get_theme_file_path('inc/admin/pepernoten-meta-boxes.php');
-require_once get_theme_file_path('inc/admin/footer-settings.php');
+require_once get_theme_file_path('inc/admin/general-settings.php');
 require_once get_theme_file_path('inc/admin/recept-scraper.php');
 require_once get_theme_file_path('inc/recepten/helpers.php');
 
@@ -64,12 +64,17 @@ function rick_primary_menu_fallback() {
             'url' => get_post_type_archive_link('pepernoot'),
             'active' => is_post_type_archive('pepernoot') || is_singular('pepernoot'),
         ),
-        array(
+    );
+
+    // Alleen in het menu tonen als de aparte CTA-knop rechts uitstaat
+    $cta_enable = function_exists('rick_get_header_setting') ? rick_get_header_setting('header_cta_enable', '1') : '1';
+    if ( ! $cta_enable || $cta_enable === '0' ) {
+        $items[] = array(
             'label' => __('🍪 Pepernoot Beoordelen', 'rick'),
             'url' => home_url('/pepernoot-registreren/'),
             'active' => is_page('pepernoot-registreren'),
-        ),
-    );
+        );
+    }
 
     echo '<ul class="primary-menu">';
 
