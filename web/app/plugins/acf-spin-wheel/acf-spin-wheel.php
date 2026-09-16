@@ -63,6 +63,7 @@ final class ACF_Spin_Wheel {
         require_once ACF_SPIN_WHEEL_PATH . 'includes/class-settings.php';
         require_once ACF_SPIN_WHEEL_PATH . 'includes/class-rest-api.php';
         require_once ACF_SPIN_WHEEL_PATH . 'includes/class-shortcode.php';
+        require_once ACF_SPIN_WHEEL_PATH . 'includes/class-block.php';
         require_once ACF_SPIN_WHEEL_PATH . 'includes/class-assets.php';
     }
 
@@ -79,6 +80,7 @@ final class ACF_Spin_Wheel {
         ACF_Spin_Wheel_Settings::get_instance();
         ACF_Spin_Wheel_REST_API::get_instance();
         ACF_Spin_Wheel_Shortcode::get_instance();
+        ACF_Spin_Wheel_Block::get_instance();
         ACF_Spin_Wheel_Assets::get_instance();
     }
 

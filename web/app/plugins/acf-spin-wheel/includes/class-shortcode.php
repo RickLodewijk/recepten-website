@@ -51,10 +51,14 @@ class ACF_Spin_Wheel_Shortcode {
     public function render_shortcode( $atts = [] ): string {
         ACF_Spin_Wheel_Assets::get_instance()->enqueue_assets();
 
+        $atts = shortcode_atts( [
+            'title' => '',
+        ], is_array( $atts ) ? $atts : [] );
+
         $is_logged_in  = is_user_logged_in();
         $is_shared     = ! empty( $_GET['wheel'] );
         $require_login = (bool) get_option( 'acf_spin_wheel_require_login', 0 );
-        $default_title = __( 'My Spin Wheel', 'acf-spin-wheel' );
+        $default_title = ! empty( $atts['title'] ) ? sanitize_text_field( $atts['title'] ) : __( 'My Spin Wheel', 'acf-spin-wheel' );
         $current_url   = is_singular() ? get_permalink() : ( ! empty( $_SERVER['REQUEST_URI'] ) ? home_url( add_query_arg( [] ) ) : home_url( '/' ) );
         $login_url     = wp_login_url( $current_url );
 

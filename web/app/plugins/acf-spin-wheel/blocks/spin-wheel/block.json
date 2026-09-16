@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "acf-spin-wheel/wheel",
+  "version": "1.0.0",
+  "title": "Spin Wheel",
+  "category": "widgets",
+  "icon": "controls-repeat",
+  "description": "Interactief draairad voor het kiezen van namen, recepten of opties.",
+  "keywords": [ "rad", "spin", "wheel", "fortuin", "lootjes", "kiezer" ],
+  "textdomain": "acf-spin-wheel",
+  "supports": {
+    "html": false,
+    "align": [ "wide", "full" ]
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css"
+}
