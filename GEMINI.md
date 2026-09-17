@@ -52,3 +52,7 @@ De website draait in Docker.
 *   **Web-root (in container):** `/var/www/html/web`
 *   **WP-Load:** `/var/www/html/web/wp/wp-load.php`
 *   Bij het maken van database-wijzigingen via scripts, gebruik altijd `docker-compose exec app php <script>`.
+
+## 🛑 Git & Commits
+*   **NOOIT** zelf `git commit` of `git push` uitvoeren.
+*   Wijzigingen worden alleen lokaal voorbereid en getest. Het committen en pushen naar GitHub gebeurt **altijd uitsluitend handmatig door de gebruiker**.
