@@ -64,14 +64,6 @@ class ACF_Spin_Wheel_Shortcode {
 
         // Default sample entries for brand new wheel
         $default_entries = implode( "\n", [
-            __( 'Pizza', 'acf-spin-wheel' ),
-            __( 'Burgers', 'acf-spin-wheel' ),
-            __( 'Sushi', 'acf-spin-wheel' ),
-            __( 'Pasta', 'acf-spin-wheel' ),
-            __( 'Tacos', 'acf-spin-wheel' ),
-            __( 'Salad', 'acf-spin-wheel' ),
-            __( 'Curry', 'acf-spin-wheel' ),
-            __( 'BBQ', 'acf-spin-wheel' ),
         ] );
 
         ob_start();

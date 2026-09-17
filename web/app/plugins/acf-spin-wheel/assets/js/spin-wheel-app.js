@@ -647,14 +647,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (titleInput) titleInput.value = 'My Spin Wheel';
             if (entriesInput) {
                 entriesInput.value = [
-                    'Pizza', 'Burgers', 'Sushi', 'Pasta',
-                    'Tacos', 'Salad', 'Curry', 'BBQ'
                 ].join('\n');
             }
 
             originalEntries = [
-                'Pizza', 'Burgers', 'Sushi', 'Pasta',
-                'Tacos', 'Salad', 'Curry', 'BBQ'
             ];
             removedEntries = [];
             updateResetUI();
