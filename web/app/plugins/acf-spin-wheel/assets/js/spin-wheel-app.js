@@ -203,14 +203,30 @@ document.addEventListener('DOMContentLoaded', () => {
             activeShareToken = state.token || null;
             if (titleInput && state.title) titleInput.value = state.title;
 
-            originalEntries = Array.isArray(state.originalEntries) ? state.originalEntries : [];
-            removedEntries = Array.isArray(state.removedEntries) ? state.removedEntries : [];
+            const legacyDummies = new Set(['Pizza', 'Burgers', 'Sushi', 'Pasta', 'Tacos', 'Salad', 'Curry', 'BBQ']);
+            let rawOrig = Array.isArray(state.originalEntries) ? state.originalEntries : [];
+            let rawRem = Array.isArray(state.removedEntries) ? state.removedEntries : [];
+            let rawAct = typeof state.activeEntries === 'string' ? state.activeEntries.split('\n').map(l => l.trim()).filter(l => l.length > 0) : [];
 
-            if (entriesInput && state.activeEntries) {
-                entriesInput.value = state.activeEntries;
-            } else if (entriesInput && originalEntries.length > 0) {
-                const elimSet = new Set(removedEntries);
-                entriesInput.value = originalEntries.filter(e => !elimSet.has(e)).join('\n');
+            // If there are other entries present, strip legacy dummy food items
+            if (rawOrig.some(e => !legacyDummies.has(e)) || rawAct.some(e => !legacyDummies.has(e))) {
+                rawOrig = rawOrig.filter(e => !legacyDummies.has(e));
+                rawRem = rawRem.filter(e => !legacyDummies.has(e));
+                rawAct = rawAct.filter(e => !legacyDummies.has(e));
+            }
+
+            originalEntries = rawOrig;
+            removedEntries = rawRem;
+
+            if (entriesInput) {
+                if (rawAct.length > 0) {
+                    entriesInput.value = rawAct.join('\n');
+                } else if (originalEntries.length > 0) {
+                    const elimSet = new Set(removedEntries);
+                    entriesInput.value = originalEntries.filter(e => !elimSet.has(e)).join('\n');
+                } else {
+                    entriesInput.value = '';
+                }
             }
 
             updateWheelFromInput();
@@ -458,8 +474,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // If user re-added an eliminated item to the textarea, remove it from removedEntries
             removedEntries = removedEntries.filter(r => !activeSet.has(r));
 
-            const fullSet = new Set([...originalEntries, ...currentActive, ...removedEntries]);
-            originalEntries = Array.from(fullSet);
+            // Master original entries reflects current active list plus any specifically eliminated ones
+            originalEntries = [...currentActive, ...removedEntries];
 
             updateWheelFromInput();
             updateResetUI();
@@ -552,9 +568,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const activeList = parseEntries(entriesInput.value).map(s => s.label);
-        // Master allEntries includes originalEntries, current activeList, and removedEntries
-        const fullSet = new Set([...originalEntries, ...activeList, ...removedEntries]);
-        const allEntries = Array.from(fullSet);
+        const activeSet = new Set(activeList);
+        // Master allEntries consists strictly of current active entries + legitimately eliminated entries
+        const validRemoved = removedEntries.filter(r => !activeSet.has(r));
+        const allEntries = [...activeList, ...validRemoved];
+        originalEntries = allEntries;
 
         if (allEntries.length === 0) {
             showToast(i18n.emptyNotice || 'Please enter at least one entry.', 'error');
@@ -645,18 +663,16 @@ document.addEventListener('DOMContentLoaded', () => {
             activeShareUrl = null;
 
             if (titleInput) titleInput.value = 'My Spin Wheel';
-            if (entriesInput) {
-                entriesInput.value = [
-                ].join('\n');
-            }
+            if (entriesInput) entriesInput.value = '';
 
-            originalEntries = [
-            ];
+            originalEntries = [];
             removedEntries = [];
             updateResetUI();
 
             updateWheelFromInput();
-            saveSessionState();
+            try {
+                localStorage.removeItem('acf_spin_active_state');
+            } catch (e) {}
 
             if (statusBar) statusBar.style.display = 'none';
             highlightActiveCard(null);
@@ -824,8 +840,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         titleInput.disabled = false;
                     }
 
-                    originalEntries = wheel.raw_entries ? wheel.raw_entries.split('\n').map(l => l.trim()).filter(l => l.length > 0) : [];
-                    removedEntries = Array.isArray(wheel.eliminated_entries) ? [...wheel.eliminated_entries] : [];
+                    let parsedEntries = wheel.raw_entries ? wheel.raw_entries.split('\n').map(l => l.trim()).filter(l => l.length > 0) : [];
+                    let parsedEliminated = Array.isArray(wheel.eliminated_entries) ? [...wheel.eliminated_entries] : [];
+
+                    // Strip any legacy dummy foods if custom entries exist
+                    const legacyDummies = new Set(['Pizza', 'Burgers', 'Sushi', 'Pasta', 'Tacos', 'Salad', 'Curry', 'BBQ']);
+                    if (parsedEntries.some(e => !legacyDummies.has(e))) {
+                        parsedEntries = parsedEntries.filter(e => !legacyDummies.has(e));
+                        parsedEliminated = parsedEliminated.filter(e => !legacyDummies.has(e));
+                    }
+
+                    originalEntries = parsedEntries;
+                    removedEntries = parsedEliminated;
 
                     // Filter out already eliminated entries for active canvas & textarea
                     const elimSet = new Set(removedEntries);
@@ -953,16 +979,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 entriesInput.disabled = false;
             }
 
-            originalEntries = data.raw_entries ? data.raw_entries.split('\n').map(l => l.trim()).filter(l => l.length > 0) : [];
-            removedEntries = Array.isArray(data.eliminated_entries) ? [...data.eliminated_entries] : [];
+            let parsedEntries = data.raw_entries ? data.raw_entries.split('\n').map(l => l.trim()).filter(l => l.length > 0) : [];
+            let parsedEliminated = Array.isArray(data.eliminated_entries) ? [...data.eliminated_entries] : [];
+
+            const legacyDummies = new Set(['Pizza', 'Burgers', 'Sushi', 'Pasta', 'Tacos', 'Salad', 'Curry', 'BBQ']);
+            if (parsedEntries.some(e => !legacyDummies.has(e))) {
+                parsedEntries = parsedEntries.filter(e => !legacyDummies.has(e));
+                parsedEliminated = parsedEliminated.filter(e => !legacyDummies.has(e));
+            }
+
+            originalEntries = parsedEntries;
+            removedEntries = parsedEliminated;
 
             const elimSet = new Set(removedEntries);
             const remaining = originalEntries.filter(l => !elimSet.has(l));
-
-            if (titleInput) {
-                titleInput.value = data.title || 'Shared Wheel';
-                titleInput.disabled = false;
-            }
 
             if (entriesInput) {
                 entriesInput.value = (remaining.length > 0 ? remaining : originalEntries).join('\n');

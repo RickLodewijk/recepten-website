@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define Plugin Constants
-define( 'ACF_SPIN_WHEEL_VERSION', '1.0.0' );
+define( 'ACF_SPIN_WHEEL_VERSION', '1.0.4' );
 define( 'ACF_SPIN_WHEEL_FILE', __FILE__ );
 define( 'ACF_SPIN_WHEEL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ACF_SPIN_WHEEL_URL', plugin_dir_url( __FILE__ ) );
