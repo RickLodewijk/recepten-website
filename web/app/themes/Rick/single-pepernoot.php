@@ -6,6 +6,7 @@ if ( have_posts() ) :
         the_post();
         $score = get_field( 'pepernoot_score' );
         $subtitle = get_field( 'pepernoot_subtitle' );
+        $auteur = function_exists('get_field') ? get_field( 'pepernoot_auteur' ) : get_post_meta( get_the_ID(), 'pepernoot_auteur', true );
         $image = get_field( 'pepernoot_afbeelding' );
         $intro = get_field( 'pepernoot_intro' );
         $pluspunten = get_field( 'pepernoot_pluspunten' );
@@ -20,9 +21,15 @@ if ( have_posts() ) :
 
                     <h1><?php the_title(); ?></h1>
 
-                    <?php if ( $score !== '' ) : ?>
-                        <span class="badge">Score: <?php echo esc_html( $score ); ?>/10</span>
-                    <?php endif; ?>
+                    <div class="recipe-meta-badges">
+                        <?php if ( $score !== '' && $score !== null ) : ?>
+                            <span class="badge">Score: <?php echo esc_html( $score ); ?>/10</span>
+                        <?php endif; ?>
+
+                        <?php if ( ! empty( $auteur ) ) : ?>
+                            <span class="badge badge--author">✍️ Geschreven door: <?php echo esc_html( $auteur ); ?></span>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <?php if ( $image ) : ?>

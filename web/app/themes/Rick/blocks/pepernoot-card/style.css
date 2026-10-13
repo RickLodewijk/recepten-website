@@ -65,6 +65,12 @@
     border: 1px solid #a7f3d0;
 }
 
+.rick-review-badge--author {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+
 .rick-pepernoot-review-title {
     font-size: 2rem;
     font-weight: 800;

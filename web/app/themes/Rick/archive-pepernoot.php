@@ -223,6 +223,12 @@ get_header();
       font-weight: 800;
     }
 
+    .pn-tag--author {
+      background: #EAE1D2;
+      color: var(--pn-dark);
+      font-weight: 700;
+    }
+
     .pn-card__desc {
       font-size: 13.5px;
       color: var(--pn-text-muted);
@@ -429,6 +435,7 @@ get_header();
                     $pro       = get_field( 'pepernoot_pro', $post_id );
                     $con       = get_field( 'pepernoot_con', $post_id );
                     $subtitle  = get_field( 'pepernoot_subtitle', $post_id );
+                    $auteur    = get_field( 'pepernoot_auteur', $post_id ) ?: get_post_meta( $post_id, 'pepernoot_auteur', true );
                 
                 // Nummer 1 krijgt automatisch de gouden 'top' klasse
                 $is_top_score = ($rank === 1 || (float)$score >= 8.5);
@@ -443,7 +450,7 @@ get_header();
                                 <span class="pn-card__title"><?php the_title(); ?></span>
                             </a>
 
-                            <!-- Tags: Merk, Winkel, Prijs -->
+                            <!-- Tags: Merk, Winkel, Prijs, Auteur -->
                             <div class="pn-card__tags">
                                 <?php if ( $brand ) : ?>
                                     <span class="pn-tag pn-tag--brand"><?php echo esc_html( $brand ); ?></span>
@@ -455,6 +462,10 @@ get_header();
 
                                 <?php if ( $price ) : ?>
                                     <span class="pn-tag pn-tag--price">€ <?php echo esc_html( str_replace('€', '', $price) ); ?></span>
+                                <?php endif; ?>
+
+                                <?php if ( $auteur ) : ?>
+                                    <span class="pn-tag pn-tag--author">✍️ <?php echo esc_html( $auteur ); ?></span>
                                 <?php endif; ?>
                             </div>
 

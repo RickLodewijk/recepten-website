@@ -32,6 +32,11 @@ function rick_render_pepernoot_meta_box( $post ) {
             'type' => 'text',
             'description' => 'Korte titelregel onder de naam',
         ),
+        'pepernoot_auteur' => array(
+            'label' => 'Geschreven door',
+            'type' => 'text',
+            'description' => 'Door wie is deze review geschreven?',
+        ),
         'pepernoot_afbeelding' => array(
             'label' => 'Afbeelding',
             'type' => 'url',
@@ -94,6 +99,7 @@ function rick_save_pepernoot_meta_box( $post_id ) {
     $fields = array(
         'pepernoot_score',
         'pepernoot_subtitle',
+        'pepernoot_auteur',
         'pepernoot_afbeelding',
         'pepernoot_intro',
         'pepernoot_pluspunten',

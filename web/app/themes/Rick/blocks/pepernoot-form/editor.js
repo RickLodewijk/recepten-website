@@ -229,9 +229,13 @@
                                 el('input', { type: 'text', disabled: true, placeholder: 'bijv. Van Delft Stroopwafel Pepernoten' })
                             ),
                             el('div', { className: 'rick-form-group' },
-                                el('label', null, 'Korte Subtitel'),
-                                el('input', { type: 'text', disabled: true, placeholder: 'bijv. Knapperige kruidnoten...' })
+                                el('label', null, 'Geschreven door'),
+                                el('input', { type: 'text', disabled: true, placeholder: 'bijv. Rick Lodewijk' })
                             )
+                        ),
+                        el('div', { className: 'rick-form-group', style: { marginTop: '10px' } },
+                            el('label', null, 'Korte Subtitel'),
+                            el('input', { type: 'text', disabled: true, placeholder: 'bijv. Knapperige kruidnoten...' })
                         ),
                         el('div', { className: 'rick-form-heading', style: { marginTop: '16px' } },
                             el('span', { className: 'rick-form-heading__icon' }, '⭐ '),

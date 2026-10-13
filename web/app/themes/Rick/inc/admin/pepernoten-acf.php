@@ -37,6 +37,19 @@ acf_add_local_field_group(array(
             'maxlength' => '',
         ),
         array(
+            'key' => 'field_rick_pepernoot_auteur',
+            'label' => 'Geschreven door',
+            'name' => 'pepernoot_auteur',
+            'type' => 'text',
+            'instructions' => 'Door wie is deze review geschreven?',
+            'required' => 0,
+            'wrapper' => array(
+                'width' => '50',
+            ),
+            'default_value' => '',
+            'placeholder' => 'bijv. Rick Lodewijk',
+        ),
+        array(
             'key' => 'field_rick_pepernoot_brand',
             'label' => 'Merk',
             'name' => 'pepernoot_brand',

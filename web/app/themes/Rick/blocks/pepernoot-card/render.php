@@ -51,6 +51,7 @@ if (!$pepernoot_post) {
 $title       = get_the_title($pepernoot_id);
 $permalink   = get_permalink($pepernoot_id);
 $subtitle    = function_exists('get_field') ? get_field('pepernoot_subtitle', $pepernoot_id) : get_post_meta($pepernoot_id, 'pepernoot_subtitle', true);
+$auteur      = function_exists('get_field') ? get_field('pepernoot_auteur', $pepernoot_id) : get_post_meta($pepernoot_id, 'pepernoot_auteur', true);
 $score       = function_exists('get_field') ? get_field('pepernoot_score', $pepernoot_id) : get_post_meta($pepernoot_id, 'pepernoot_score', true);
 $brand       = function_exists('get_field') ? get_field('pepernoot_brand', $pepernoot_id) : get_post_meta($pepernoot_id, 'pepernoot_brand', true);
 $shop        = function_exists('get_field') ? get_field('pepernoot_shop', $pepernoot_id) : get_post_meta($pepernoot_id, 'pepernoot_shop', true);
@@ -90,6 +91,9 @@ $min_items  = !empty($minpunten) ? array_filter(array_map('trim', preg_split('/\
                         <?php endif; ?>
                         <?php if (!empty($price)) : ?>
                             <span class="rick-review-badge rick-review-badge--price">💶 <?php echo esc_html($price); ?></span>
+                        <?php endif; ?>
+                        <?php if (!empty($auteur)) : ?>
+                            <span class="rick-review-badge rick-review-badge--author">✍️ <?php echo esc_html($auteur); ?></span>
                         <?php endif; ?>
                     </div>
 

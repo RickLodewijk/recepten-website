@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rick_pepernoot_form_n
     if (wp_verify_nonce($_POST['rick_pepernoot_form_nonce'], 'rick_submit_pepernoot')) {
         $name = sanitize_text_field($_POST['pepernoot_title'] ?? '');
         $sub = sanitize_text_field($_POST['pepernoot_subtitle'] ?? '');
+        $auteur = sanitize_text_field($_POST['pepernoot_auteur'] ?? '');
         $score = sanitize_text_field($_POST['pepernoot_score'] ?? '');
         $brand = sanitize_text_field($_POST['pepernoot_brand'] ?? '');
         $shop = sanitize_text_field($_POST['pepernoot_shop'] ?? '');
@@ -42,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['rick_pepernoot_form_n
 
             if ($post_id && !is_wp_error($post_id)) {
                 update_post_meta($post_id, 'pepernoot_subtitle', $sub);
+                update_post_meta($post_id, 'pepernoot_auteur', $auteur);
                 update_post_meta($post_id, 'pepernoot_score', $score);
                 update_post_meta($post_id, 'pepernoot_brand', $brand);
                 update_post_meta($post_id, 'pepernoot_shop', $shop);
@@ -115,9 +117,13 @@ $wrapper_attributes = get_block_wrapper_attributes([
                                 <input type="text" id="pepernoot_title" name="pepernoot_title" placeholder="bijv. Van Delft Stroopwafel Pepernoten" required />
                             </div>
                             <div class="rick-form-group">
-                                <label for="pepernoot_subtitle">Korte Subtitel</label>
-                                <input type="text" id="pepernoot_subtitle" name="pepernoot_subtitle" placeholder="bijv. Knapperige kruidnoten met karamelglazuur" />
+                                <label for="pepernoot_auteur">Geschreven door</label>
+                                <input type="text" id="pepernoot_auteur" name="pepernoot_auteur" placeholder="bijv. Gerda" value="<?php echo is_user_logged_in() ? esc_attr(wp_get_current_user()->display_name) : ''; ?>" />
                             </div>
+                        </div>
+                        <div class="rick-form-group">
+                            <label for="pepernoot_subtitle">Korte Subtitel</label>
+                            <input type="text" id="pepernoot_subtitle" name="pepernoot_subtitle" placeholder="bijv. Knapperige kruidnoten met karamelglazuur" />
                         </div>
                     </div>
                 </details>
