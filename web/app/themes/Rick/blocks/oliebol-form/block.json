@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "rick/oliebol-form",
+  "version": "1.0.0",
+  "title": "Oliebol Inzendformulier",
+  "category": "rick-blocks",
+  "icon": "store",
+  "description": "Een interactief frontend formulier om direct een nieuwe oliebol review en beoordeling in te zenden.",
+  "keywords": ["oliebol", "oliebollen", "formulier", "toevoegen", "form", "inzenden", "review", "score"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Nieuwe Oliebol Review Toevoegen"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "Deel jouw ervaring! Waar ben je geweest en hoe smaakte de oliebol?"
+    },
+    "badge": {
+      "type": "string",
+      "default": "✨ Oliebollen Test & Beoordeling"
+    },
+    "buttonText": {
+      "type": "string",
+      "default": "✨ Oliebol Review Opslaan & Publiceren"
+    },
+    "postStatus": {
+      "type": "string",
+      "default": "publish"
+    }
+  },
+  "editorScript": "file:./editor.js",
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "render": "file:./render.php"
+}

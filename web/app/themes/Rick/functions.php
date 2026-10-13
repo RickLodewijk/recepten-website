@@ -2,11 +2,14 @@
 require_once get_theme_file_path('inc/post-types/recepten.php');
 require_once get_theme_file_path('inc/post-types/bak-tips.php');
 require_once get_theme_file_path('inc/post-types/pepernoten.php');
+require_once get_theme_file_path('inc/post-types/oliebollen.php');
 require_once get_theme_file_path('inc/taxonomies/recept-categorie.php');
 require_once get_theme_file_path('inc/admin/recepten-meta-boxes.php');
 require_once get_theme_file_path('inc/admin/baktips-acf.php');
 require_once get_theme_file_path('inc/admin/pepernoten-acf.php');
 require_once get_theme_file_path('inc/admin/pepernoten-meta-boxes.php');
+require_once get_theme_file_path('inc/admin/oliebollen-acf.php');
+require_once get_theme_file_path('inc/admin/oliebollen-meta-boxes.php');
 require_once get_theme_file_path('inc/admin/general-settings.php');
 require_once get_theme_file_path('inc/admin/recept-scraper.php');
 require_once get_theme_file_path('inc/recepten/helpers.php');
@@ -63,6 +66,11 @@ function rick_primary_menu_fallback() {
             'label' => __('Pepernoten', 'rick'),
             'url' => get_post_type_archive_link('pepernoot'),
             'active' => is_post_type_archive('pepernoot') || is_singular('pepernoot'),
+        ),
+        array(
+            'label' => __('Oliebollen', 'rick'),
+            'url' => get_post_type_archive_link('oliebol'),
+            'active' => is_post_type_archive('oliebol') || is_singular('oliebol'),
         ),
     );
 

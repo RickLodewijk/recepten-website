@@ -1,0 +1,77 @@
+.wp-block[data-type="rick/oliebol-form"],
+.wp-block-rick-oliebol-form {
+    max-width: 840px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+}
+
+.acf-block-fields-container {
+    background: #ffffff !important;
+    color: #1d2327 !important;
+    border: 1px solid #c3c4c7 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+    margin: 15px auto !important;
+    max-width: 840px !important;
+    overflow: hidden !important;
+    display: block !important;
+}
+
+.acf-block-header {
+    background: #f6f7f7 !important;
+    border-bottom: 1px solid #dcdcde !important;
+    padding: 12px 18px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.acf-block-header__title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 14px !important;
+}
+
+.acf-block-header__tag {
+    background: #e0f2fe !important;
+    color: #0369a1 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+}
+
+.acf-fields-table {
+    padding: 16px 20px !important;
+}
+
+.acf-field {
+    margin-bottom: 16px !important;
+}
+
+.acf-field .acf-label label {
+    font-weight: 600 !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+}
+
+.acf-field .acf-label .description {
+    color: #64748b !important;
+    font-size: 12px !important;
+    margin: 0 0 6px 0 !important;
+}
+
+.acf-block-collapsed-bar {
+    background: #ffffff !important;
+    border: 1px solid #c3c4c7 !important;
+    border-left: 4px solid #d97706 !important;
+    border-radius: 8px !important;
+    padding: 12px 18px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    margin: 12px auto !important;
+}

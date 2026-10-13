@@ -1,0 +1,15 @@
+.wp-block[data-type="rick/oliebol-card"],
+.wp-block-rick-oliebol-card {
+    max-width: 840px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+}
+
+.acf-block-fields-container {
+    background: #ffffff !important;
+    border: 1px solid #c3c4c7 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    margin: 15px auto !important;
+}
