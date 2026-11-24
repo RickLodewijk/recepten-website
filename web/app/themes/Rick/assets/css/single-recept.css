@@ -345,6 +345,13 @@ h2 {
     }
 
     /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+        break-after: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
     h1 {
         color: var(--primary-color) !important;
         font-size: 24pt !important;
@@ -405,6 +412,17 @@ h2 {
         margin-top: 15pt !important;
     }
 
+    .ingredients-table thead {
+        display: table-header-group;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    .ingredients-table tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
     .ingredients-table th {
         background-color: #f3f4f6 !important;
         color: #000 !important;
@@ -432,13 +450,36 @@ h2 {
     }
 
     /* Steps */
-    .steps {
+    .steps,
+    .recipe-section,
+    .recipe-section-lead,
+    .recipe-step-group,
+    .recipe-step-lead {
         display: block !important;
     }
 
-    /* Prevent breaking content */
-    .header, .intro, .ingredients-table, .tip-box, .steps p, .steps li {
+    .steps p,
+    .steps li {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* Prevent breaking content & orphaned headings */
+    .header,
+    .intro,
+    .recipe-section--nutrition,
+    .recipe-section-lead,
+    .recipe-step-group,
+    .recipe-step-lead,
+    .tip-box,
+    .steps p,
+    .steps li {
         page-break-inside: avoid;
         break-inside: avoid;
+    }
+
+    .recipe-step-group--long {
+        page-break-inside: auto;
+        break-inside: auto;
     }
 }

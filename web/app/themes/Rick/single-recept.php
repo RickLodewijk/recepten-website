@@ -88,62 +88,78 @@ if (have_posts()):
             <?php endif; ?>
 
             <?php if ($ingredienten): ?>
-                <h2>Ingrediënten</h2>
-                <table class="ingredients-table">
-                    <thead>
-                        <tr>
-                            <th>Ingrediënt</th>
-                            <th>Hoeveelheid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $ingredient_lines = preg_split('/\r\n|\r|\n/', trim($ingredienten));
+                <section class="recipe-section recipe-section--ingredients">
+                    <h2>Ingrediënten</h2>
+                    <table class="ingredients-table">
+                        <thead>
+                            <tr>
+                                <th>Ingrediënt</th>
+                                <th>Hoeveelheid</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $ingredient_lines = preg_split('/\r\n|\r|\n/', trim($ingredienten));
 
-                        foreach ($ingredient_lines as $ingredient_line) {
-                            $ingredient_line = wp_strip_all_tags(trim($ingredient_line));
+                            foreach ($ingredient_lines as $ingredient_line) {
+                                $ingredient_line = wp_strip_all_tags(trim($ingredient_line));
 
-                            if ($ingredient_line === '') {
-                                continue;
+                                if ($ingredient_line === '') {
+                                    continue;
+                                }
+
+                                $parts = array_map('trim', explode('|', $ingredient_line, 2));
+                                $ingredient_name = wp_strip_all_tags($parts[0]);
+                                $ingredient_amount = wp_strip_all_tags($parts[1] ?? '');
+
+                                echo '<tr>';
+                                echo '<td>' . esc_html($ingredient_name) . '</td>';
+                                echo '<td>' . esc_html($ingredient_amount) . '</td>';
+                                echo '</tr>';
                             }
-
-                            $parts = array_map('trim', explode('|', $ingredient_line, 2));
-                            $ingredient_name = wp_strip_all_tags($parts[0]);
-                            $ingredient_amount = wp_strip_all_tags($parts[1] ?? '');
-
-                            echo '<tr>';
-                            echo '<td>' . esc_html($ingredient_name) . '</td>';
-                            echo '<td>' . esc_html($ingredient_amount) . '</td>';
-                            echo '</tr>';
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                            ?>
+                        </tbody>
+                    </table>
+                </section>
             <?php endif; ?>
 
             <?php if ($kcal || $eiwitten || $koolhydraten || $vetten): ?>
-                <h2>Voedingswaarden per 100 gram</h2>
-                <div class="nutrition">
-                    <?php if ($kcal): ?>
-                        <p><strong>Energie:</strong> <?= ($kcal) ?> kcal</p>
-                    <?php endif; ?>
-                    <?php if ($eiwitten): ?>
-                        <p><strong>Eiwitten:</strong> <?= esc_html($eiwitten) ?> g</p>
-                    <?php endif; ?>
-                    <?php if ($koolhydraten): ?>
-                        <p><strong>Koolhydraten:</strong> <?= esc_html($koolhydraten) ?> g</p>
-                    <?php endif; ?>
-                    <?php if ($vetten): ?>
-                        <p><strong>Vetten:</strong> <?= esc_html($vetten) ?> g</p>
-                    <?php endif; ?>
-                </div>
+                <section class="recipe-section recipe-section--nutrition">
+                    <h2>Voedingswaarden per 100 gram</h2>
+                    <div class="nutrition">
+                        <?php if ($kcal): ?>
+                            <p><strong>Energie:</strong> <?= ($kcal) ?> kcal</p>
+                        <?php endif; ?>
+                        <?php if ($eiwitten): ?>
+                            <p><strong>Eiwitten:</strong> <?= esc_html($eiwitten) ?> g</p>
+                        <?php endif; ?>
+                        <?php if ($koolhydraten): ?>
+                            <p><strong>Koolhydraten:</strong> <?= esc_html($koolhydraten) ?> g</p>
+                        <?php endif; ?>
+                        <?php if ($vetten): ?>
+                            <p><strong>Vetten:</strong> <?= esc_html($vetten) ?> g</p>
+                        <?php endif; ?>
+                    </div>
+                </section>
             <?php endif; ?>
 
             <?php if ($bereidingswijze): ?>
-                <h2>Bereidingswijze</h2>
-                <div class="steps">
-                    <?= $bereidingswijze ?>
-                </div>
+                <?php $bereidingswijze_parts = rick_prepare_bereidingswijze_print_parts($bereidingswijze); ?>
+                <section class="recipe-section recipe-section--steps">
+                    <div class="recipe-section-lead">
+                        <h2>Bereidingswijze</h2>
+                        <?php if ($bereidingswijze_parts['lead'] !== ''): ?>
+                            <div class="steps">
+                                <?= $bereidingswijze_parts['lead'] ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php if ($bereidingswijze_parts['rest'] !== ''): ?>
+                        <div class="steps">
+                            <?= $bereidingswijze_parts['rest'] ?>
+                        </div>
+                    <?php endif; ?>
+                </section>
             <?php endif; ?>
 
             <?php if ($bakker_tip): ?>
